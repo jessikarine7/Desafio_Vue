@@ -1,9 +1,11 @@
 <template>
-   <v-app class="white d-flex flex-grow-1 flex-row">
-    <div class="white d-flex flex-grow-1 flex-row">
+  <v-app>
+    <div class="d-flex align-start flex-grow-1">
       <menuLateral/>
-      <menuSuperior/>
-      <usuariosAgrale/>
+      <div class="white d-flex flex-grow-1 flex-row flex-wrap">
+        <menuSuperior/>
+        <usuariosAgrale/>
+      </div>
     </div>
   </v-app>
 </template>
