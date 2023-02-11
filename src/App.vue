@@ -1,10 +1,11 @@
 <template>
-  <div id="app" class="white d-flex flex-grow-1 flex-row">
-    <menuLateral/>
-    <menuSuperior/>
-    <usuariosAgrale/>
-    <!-- <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/> -->
-  </div>
+   <v-app class="white d-flex flex-grow-1 flex-row">
+    <div class="white d-flex flex-grow-1 flex-row">
+      <menuLateral/>
+      <menuSuperior/>
+      <usuariosAgrale/>
+    </div>
+  </v-app>
 </template>
 
 <script lang="ts">
@@ -24,12 +25,4 @@ export default class App extends Vue {}
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
 </style>

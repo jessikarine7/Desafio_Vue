@@ -28,10 +28,10 @@
 </template>
 
 <script lang="ts">
-import "mdi-icons/css/materialdesignicons.min.css";
-
-export default {
-
+import { Component, Vue } from 'vue-property-decorator';
+@Component
+export default class App extends Vue {
+    
 }
 </script>
 
@@ -40,15 +40,6 @@ export default {
   height: 30px !important; 
   width: 30px !important;
 }
-
-/* .chip >>> .v-chip__content{
-  flex-direction: column !important;
-}
-.v-chip.v-size--default {
-  border-radius: 0px;
-  font-size: 14px;
-  max-height: 70px !important; 
-}*/
 .font{
   font-family: 'Verdana';
   font-style: normal;
