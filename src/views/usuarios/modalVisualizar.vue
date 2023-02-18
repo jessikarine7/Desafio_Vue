@@ -13,12 +13,12 @@
         <v-btn               
           hide-details
           dense 
-          :color="this.status === true ? '#107154' : '#CCCCCC'"
-          v-model="this.status"
+          :color="pegarUsuario.situacao === 'Ativo' ? '#107154' : '#CCCCCC'"
+          v-model="pegarUsuario.situacao"
           class="button"
         >
-          <span :style="{color: this.status === true ? '#fff' : '#4D4D4D'}">
-            {{this.status === true ? 'Ativo' : 'Inativo'}}
+          <span :style="{color: pegarUsuario.situacao === 'Ativo' ? '#fff' : '#4D4D4D'}">
+            {{pegarUsuario.situacao === 'Ativo' ? 'Ativo' : 'Inativo'}}
           </span>
         </v-btn>
       </div>
@@ -31,47 +31,69 @@
     </div>
 
     <div class="white d-flex flex-column pa-5 justify-space-between" style="height:400px">
-      <v-form class="pa-4"  style="width: 100%; border: solid 1px #E6E6E6; border-radius: 10px" >
+      <v-form class="pa-4 form">
         <div class="d-flex pb-10">
-          <v-input
-            label="Nome Completo"
-            filled
-            class="mr-4 formAdd"
-            style="width: 50%"
-            dense
-            :messages="['Isaque Nilton', 'color: #4D4D4D']"
-          ></v-input>
+          <div class="d-flex flex-column" style="width: 50%;">
+            <v-input
+              label="Nome Completo"
+              filled
+              hide-details
+              class="mr-4 formAdd"
+              style="width: 50%"
+              dense
+              :messages="[]"
+            ></v-input>
+            <span class="span">
+              {{pegarUsuario.nome}}
+            </span>
+          </div>
 
-          <v-input
-            class="formAdd"
-            label="CPF(opcional)"
-            filled
-            style="width: 50%;"
-            dense
-            :messages="['000.000.000-00']"
-          ></v-input>
+          <div class="d-flex flex-column" style="width: 50%;">
+            <v-input
+              class="formAdd"
+              label="CPF (opcional)"
+              filled
+              hide-details
+              style="width: 50%;"
+              dense
+            ></v-input>
+            <span class="span">
+              {{pegarUsuario.cpf}}
+            </span>
+          </div>
         </div>
 
         <v-row style="border: solid 0.1px #E6E6E6"></v-row>
 
         <div class="d-flex pt-10">
-          <v-input
-            label="E-mail"
-            filled
-            class="mr-4 formAdd"
-            style="width: 50%"
-            dense
-            :messages="['inilton@agrale.com.br', 'color: #4D4D4D']"
-          ></v-input>
+          <div class="d-flex flex-column" style="width: 50%;">
+            <v-input
+              label="E-mail"
+              filled
+              class="mr-4 formAdd"
+              style="width: 50%"
+              dense
+              hide-details
+              :messages="[pegarUsuario.email]"
+            ></v-input>
+            <span class="span">
+              {{pegarUsuario.email}}
+            </span>
+          </div>
 
-          <v-input
-            label="Perfil de Usuário"
-            filled
-            style="width: 50%"
-            class="formAdd"
-            dense
-            :messages="['Coordenador Assistência Técnica', 'color: #4D4D4D']"
-          ></v-input>
+          <div class="d-flex flex-column" style="width: 50%;">
+            <v-input
+              label="Perfil de Usuário"
+              filled
+              style="width: 50%"
+              class="formAdd"
+              dense
+              hide-details
+            ></v-input>
+            <span class="span">
+              {{pegarUsuario.perfil}}
+            </span>
+          </div>
         </div>
       </v-form>
 
@@ -103,19 +125,27 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'; 
-import ModalAddEdit from './modalAddEdit.vue' 
+import ModalAddEdit from './modalAddEdit.vue';
+import { mapGetters, mapActions } from "vuex";
 
 @Component({
-  components:{ModalAddEdit}
+  components:{
+    ModalAddEdit,
+  },
+  methods:mapActions([
+    "getUsuarioId",
+  ]),
+  computed: mapGetters([
+    "pegarUsuario"
+  ]),
 })
-
-// interface cpf {
-//   cpf: string,
-// }
 
 export default class App extends Vue {
   @Prop({ type: Boolean }) displayVisualizar: boolean;
+  getUsuarioId!:() => Promise<[]>
+  pegarUsuario!:() => (object)
 
+  itemsUsuarios = [];
   displayModalAddEdit = false;
   status = true;
 
@@ -127,6 +157,17 @@ export default class App extends Vue {
 </script>
 
 <style scoped>
+.span{
+  color:#4D4D4D;
+  font-weight:700;
+  font-family:Verdana;
+  font-size:12px
+}
+.form{
+  width: 100%; 
+  border: solid 1px #E6E6E6; 
+  border-radius: 10px;
+}
 .formAdd{
   /* background: #F5F5F5; */
   font-family: 'Verdana';

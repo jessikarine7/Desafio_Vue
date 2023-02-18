@@ -28,7 +28,7 @@
             class="mr-4 formAdd"
             style="width: 50%"
             dense
-          ></v-text-field>
+          >{{pegarUsuario.nome}}</v-text-field>
 
           <v-text-field
             class="formAdd"
@@ -127,21 +127,31 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'; 
+import { mapGetters, mapActions } from "vuex";
 
 // interface headerItem {
 //   text: string,
 //   value: string,
 // }
 
+
 @Component({
-  // components:{modalAdd}
+  methods:mapActions([
+    "getUsuarioId",
+  ]),
+  computed: mapGetters([
+    "pegarUsuario"
+  ]),
 })
 
 export default class App extends Vue {
   @Prop({ type: Boolean }) display: boolean;
-  
+  getUsuarioId!:() => Promise<[]>
+  pegarUsuario!:() => (object)
+
   switch = true;
   modalConfirmacaoEmail = false;
+
 }
 </script>
 

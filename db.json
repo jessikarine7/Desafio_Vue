@@ -1,0 +1,24 @@
+{
+  "usuarios": [
+    {
+      "id": 1,
+      "codigo": 101,
+      "nome": "Jéssica Karine Santos",
+      "email": "jessica.santos@keyworks.com.br",
+      "perfil": "Desenvolvedora",
+      "situacao": "Inativo",
+      "opcoes": "",
+      "cpf": "000.000.000-00"
+    },
+    {
+      "id": 2,
+      "codigo": 102,
+      "nome": "João ",
+      "email": "joão@keyworks.com.br",
+      "perfil": "Desenvolvedor",
+      "situacao": "Ativo",
+      "opcoes": "",
+      "cpf": "000.000.000-00"
+    }
+  ]
+}

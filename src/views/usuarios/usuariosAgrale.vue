@@ -2,13 +2,23 @@
 <div class="pa-2 d-flex flex-grow-1 flex-column">
   <h1 class="pa-3" style="font-size: 25px">Usuários Agrale</h1> 
 
-  <div class="d-flex justify-end mr-3 mb-2">
-    <v-btn outlined class="mr-2 button">
-      <v-icon style="font-size: 20px">mdi-magnify</v-icon>
-      <span>Pesquisa</span> 
-    </v-btn>
+  <div class="d-flex justify-end mr-3 mb-2 align-center" style="width: 100%">
+    <div style="width: 150%"></div>
+    <v-text-field 
+      id="pesquisa"
+      outlined 
+      class="mr-2"
+      label="Pesquisa"
+      prepend-inner-icon="mdi-magnify"
+      hide-details
+      dense
+      style="border-radius: 8px"
+      single-line
+      placeholder="Pesquisar por Código, Nome completo, E-mail ou Perfil de Usuário"
+    >
+    </v-text-field>
 
-    <v-btn @click="displayModalAddEdit = true" class="button" color="#971E27">
+    <v-btn  @click="displayModalAddEdit = true" class="button mr-3" color="#971E27">
       <v-icon color="white" style="font-size: 20px">mdi-plus</v-icon>
       <span style="color: white">Novo</span>
     </v-btn>
@@ -40,7 +50,7 @@
 
       <div class="px-3 pb-3 mt-1 d-flex justify-space-between">
         <v-btn class="buttonExcluir" text @click="modalExcluir = false">Cancelar</v-btn>
-        <v-btn class="buttonExcluir" dark color="#E10000">Excluir</v-btn>
+        <v-btn class="buttonExcluir" dark color="#E10000" @click="deletarUsuario(id)">Excluir</v-btn>
       </div>
     </div>
   </v-dialog>
@@ -48,7 +58,7 @@
   <div class="pa-3">
     <v-data-table
       :headers="headers"
-      :items="desserts"
+      :items="todosUsuarios"
       class="elevation-1"
     >
       <template v-slot:[`item.situacao`] = {item}>
@@ -61,7 +71,7 @@
         </v-btn>
       </template>
 
-      <template v-slot:[`item.opcoes`]>
+      <template v-slot:[`item.opcoes`]="{item}">
         <v-menu offset-y>
           <template v-slot:activator="{ on, attrs }">
             <v-btn icon  v-bind="attrs" v-on="on">
@@ -69,18 +79,18 @@
             </v-btn>
           </template>
 
-          <v-list class="d-flex flex-column" dense>
-            <v-list-item @click="displayModalVisualizar = true"> 
+          <v-list class="d-flex flex-column" dense >
+            <v-list-item @click="abrirModalVisualizar(item.id)"> 
               <v-icon style="font-size: 20px" class="mr-2">mdi-eye</v-icon>
               <v-list-item-title>Visualizar</v-list-item-title>
             </v-list-item>
 
-            <v-list-item @click="displayModalAddEdit = true">
+            <v-list-item @click="abrirModalEdit(item.id)">
               <v-icon style="font-size: 20px" class="mr-2">mdi-pencil</v-icon>
               <v-list-item-title>Editar</v-list-item-title>
             </v-list-item>
 
-            <v-list-item @click="modalExcluir = true">
+            <v-list-item @click="abrirModalExcluir(item.id)">
               <v-icon style="font-size: 20px" class="mr-2">mdi-delete</v-icon>
               <v-list-item-title>Excluir</v-list-item-title>
             </v-list-item>
@@ -89,14 +99,15 @@
       </template> 
     </v-data-table>
   </div>
-
 </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import ModalAddEdit from './modalAddEdit.vue' 
-import ModalVisualizar from './modalVisualizar.vue'
+import ModalAddEdit from './modalAddEdit.vue';
+import ModalVisualizar from './modalVisualizar.vue';
+import { mapGetters, mapActions } from "vuex";
+// import { mapGetters, mapActions } from 'vuex';
 
 interface headers {
   text: string,
@@ -107,17 +118,32 @@ interface headers {
   components:{
     ModalAddEdit,
     ModalVisualizar
-  }
+  },
+  methods:mapActions([
+    "getUsuario",
+    "getUsuarioId",
+    "deleteUsuario",
+  ]),
+  computed: mapGetters([
+    "todosUsuarios"
+  ]),
 })
 
 export default class App extends Vue {
   // @Prop(Array) display: string[];
   // headers: number[] = [];
+  getUsuario!:() => Promise<[]>
+  getUsuarioId!:(id:number) => Promise<[]>
+  deleteUsuario!:(id:number) => []
+  todosUsuarios!:() => (object)
 
   switch = true;
   displayModalAddEdit = false;
   modalExcluir = false;
   displayModalVisualizar = false;
+  itemsUsuarios = [];
+  id:number;
+
 
   headers = [
     { text: 'Código', value: 'codigo' },
@@ -128,30 +154,56 @@ export default class App extends Vue {
     { text: '', value: 'opcoes' },
   ];
 
-  desserts = [
-    {     
-      codigo: 159,
-      nome: 'Jéssica Karine Santos',
-      email: 'jessica.santos@keyworks.com.br',
-      perfil: 'Desenvolvedora',
-      situacao: 'Ativo',
-      opcoes: '',
-    },
-  ];
-        
+  async carregarTabela(){
+    await this.getUsuario();
+    // this.itemsUsuarios = this.$store.getters.todosUsuarios;
+    // console.log(this.itemsUsuarios);
+  }
+  async abrirModalVisualizar(id:number){
+    await this.getUsuarioId(id)
+    this.displayModalVisualizar = true
+  }
+  async abrirModalExcluir(id:number){
+    this.modalExcluir = true
+    this.id = id
+  }
+  async abrirModalEdit(id:number){
+    this.displayModalAddEdit = true
+    await this.getUsuarioId(id)
+  }
+  async deletarUsuario(id:number){
+    await this.deleteUsuario(id)
+    await this.getUsuario();
+    this.modalExcluir = false
+  }
+  
   mounted() {
+    this.carregarTabela();
     // this.headers = [1,2,3];
-    console.log(this.headers);
+    // console.log(this.headers);
   }
 }
 </script>
 
 <style scoped>
+.v-application .primary--text{
+  width: 150% !important;
+  color:#971E27 !important;
+  caret-color:#971E27 !important;
+}
+div /deep/ .v-icon.notranslate.mdi.mdi-magnify.theme--light{
+  color:#971E27 !important;
+}
+div /deep/ .v-text-field--outlined.v-input--is-focused fieldset, .v-text-field--outlined.v-input--has-state fieldset {
+  border: solid 1px #971E27 !important;
+  color:#971E27 !important;
+}
 .button {
   border-radius: 8px !important;
   text-transform: none !important; 
   border: solid 1px #d3d3d3da;
   color:#4D4D4D;
+  min-height: 40px;
 }
 .buttonExcluir {
   border-radius: 8px !important;
