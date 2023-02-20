@@ -60,14 +60,15 @@
       :headers="headers"
       :items="todosUsuarios"
       class="elevation-1"
+      :items-per-page="10"
     >
       <template v-slot:[`item.situacao`] = {item}>
         <v-btn
-          :color="item.situacao == 'Ativo' ? '#107154' : '#CCCCCC'"
+          :color="item.situacao == true ? '#107154' : '#CCCCCC'"
           dark
           style="text-transform:none; border-radius: 9px"
         >
-          <span>{{item.situacao}}</span>
+          <span>{{item.situacao == true? 'Ativo':'Inativo'}}</span>
         </v-btn>
       </template>
 
@@ -107,7 +108,6 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import ModalAddEdit from './modalAddEdit.vue';
 import ModalVisualizar from './modalVisualizar.vue';
 import { mapGetters, mapActions } from "vuex";
-// import { mapGetters, mapActions } from 'vuex';
 
 interface headers {
   text: string,
@@ -124,7 +124,7 @@ interface headers {
     "getUsuarioId",
     "deleteUsuario",
   ]),
-  computed: mapGetters([
+  computed:mapGetters([
     "todosUsuarios"
   ]),
 })
@@ -188,12 +188,12 @@ export default class App extends Vue {
 <style scoped>
 .v-application .primary--text{
   width: 150% !important;
-  color:#971E27 !important;
+  color:#971E27 !important; 
   caret-color:#971E27 !important;
 }
-div /deep/ .v-icon.notranslate.mdi.mdi-magnify.theme--light{
+/* div /deep/ .v-icon.notranslate.mdi.mdi-magnify.theme--light{
   color:#971E27 !important;
-}
+} */
 div /deep/ .v-text-field--outlined.v-input--is-focused fieldset, .v-text-field--outlined.v-input--has-state fieldset {
   border: solid 1px #971E27 !important;
   color:#971E27 !important;

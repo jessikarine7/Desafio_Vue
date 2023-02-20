@@ -27,34 +27,41 @@ const store = new Vuex.Store({
     },
   },
   actions:{
-    getUsuario({commit},payload){
-      axios.get(`http://localhost:3000/usuarios/GET/usuarios?ID=${(payload)}`)
+    async getUsuario({commit},payload){
+      return await axios.get(`http://localhost:3000/usuarios/GET/usuarios?ID=${(payload)}`)
       .then((response) => {
         commit('preencherUsuarios',response.data)
         console.log(response.data);
       })
     },
-    getUsuarioId({commit},id){
-      return axios.get(`http://localhost:3000/usuarios?id=${(id)}`)
+    async getUsuarioId({commit},id){
+      return await axios.get(`http://localhost:3000/usuarios?id=${(id)}`)
       .then((response) => {
         commit('atribuirUsuario',response.data[0])
         console.log(response.data[0]);
       })
     },
-    deleteUsuario({commit},id){
-      return axios.delete(`http://localhost:3000/usuarios/${(id)}`)
+    async deleteUsuario({commit},id){
+      return await axios.delete(`http://localhost:3000/usuarios/${(id)}`)
       .then((response) => {
         commit('preencherUsuarios',response.data[0])
         console.log(response.data[0]);
       })
     },
-    // createUsuario({commit}, payload){
-    //   axios.post(`http://localhost:3000/usuarios/POST/usuarios?ID=${(payload.id)}`)
-    //   .then((response) => {
-    //     commit('preencherUsuarios',response.data)
-    //     console.log(response.data);
-    //   })
-    // }
+    async createUsuario({commit}, payload){
+     return await axios.post(`http://localhost:3000/usuarios/POST/usuarios?ID=${(payload.id)}`)
+      .then((response) => {
+        commit('preencherUsuarios',response.data)
+        console.log(response.data);
+      })
+    },
+    async updateUsuario({commit},id){
+      return await axios.put(`http://localhost:3000/usuarios/${(id)}`)
+      .then((response) => {
+        commit('preencherUsuarios',response.data[0])
+        console.log(response.data[0]);
+      })
+    },
   }
 })
 

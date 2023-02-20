@@ -2,14 +2,14 @@
 <div>
   <!-- modal manutenção -->
   <ModalAddEdit
-    :display="displayModalAddEdit"
-    @closeModal="displayModalAddEdit = false"
+    :display="displayModalAdd || displayModalEdit"
+    @closeModal="displayModalAdd = false, displayModalEdit = false"
   ></ModalAddEdit>
 
   <v-dialog v-model="displayVisualizar" width="800px">
     <div class="elevation-2 d-flex justify-space-between pa-4" style="background: #F5F5F5">
       <div class="d-flex align-center">
-        <h1 class="titulo mr-4">Usuário Agrale 015</h1>
+        <h1 class="titulo mr-4">Usuário Agrale {{pegarUsuario.codigo}}</h1>
         <v-btn               
           hide-details
           dense 
@@ -146,11 +146,12 @@ export default class App extends Vue {
   pegarUsuario!:() => (object)
 
   itemsUsuarios = [];
-  displayModalAddEdit = false;
+  displayModalEdit = false;
+  displayModalAdd = false;
   status = true;
 
   abrirModalEditar(){
-    this.displayModalAddEdit = true
+    this.displayModalEdit = true
     this.$emit('closeModal')
   }
 }

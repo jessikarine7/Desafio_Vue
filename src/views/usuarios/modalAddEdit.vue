@@ -9,9 +9,9 @@
         <v-switch  
           hide-details 
           dense 
-          :label="pegarUsuario.situacao === 'Ativo' ? 'Ativo' : 'Inativo'" 
+          :label="pegarUsuario.situacao === true ? 'Ativo' : 'Inativo'" 
           color="#CD202C"
-          :v-model="pegarUsuario.situacao == 'Ativo' ? this.botaoSwitch = true : this.botaoSwitch = false"
+          v-model="pegarUsuario.situacao"
         ></v-switch>
       </div>
 
@@ -30,7 +30,10 @@
             class="mr-4 formAdd"
             style="width: 50%"
             dense
-          >aaqui{{pegarUsuario.nome}}</v-text-field>
+            v-model="pegarUsuario.nome"
+            clearable
+            :rules="[rules.required, rules.nome]"
+          ></v-text-field>
 
           <v-text-field
             class="formAdd"
@@ -38,7 +41,9 @@
             filled
             style="width: 50%"
             dense
-          >{{pegarUsuario.cpf}}</v-text-field>
+            v-model="pegarUsuario.cpf"
+            clearable
+          ></v-text-field>
         </div>
 
         <div class="d-flex">
@@ -63,6 +68,9 @@
             style="width: 50%"
             dense
             v-else
+            clearable
+            v-model="pegarUsuario.email"
+            :rules="[rules.required, rules.email]"
           ></v-text-field>
 
           <v-select
@@ -71,12 +79,20 @@
             style="width: 50%"
             class="formAdd"
             dense
+            clearable
+            v-model="pegarUsuario.perfil"
+            :rules="[rules.required]"
             :items="['Desenvolvedor','Desenvolvedora']"
-          >{{pegarUsuario.perfil}}</v-select>
+          ></v-select>
         </div>
 
-        <div class="d-flex justify-end" v-if="pegarUsuario.id" @click="abrirModalExcluir(id)">
-          <v-btn outlined class="button" style="border: solid 1px #E6E6E6">
+        <div class="d-flex justify-end" v-if="pegarUsuario.id">
+          <v-btn 
+            outlined 
+            class="button" 
+            style="border: solid 1px #E6E6E6" 
+            @click="abrirModalExcluir(pegarUsuario.id)"
+          >
             <v-icon class="mr-1" style="font-size: 18px">mdi-delete</v-icon>
             <span>Excluir usuário</span>  
           </v-btn>
@@ -91,7 +107,7 @@
         >Cancelar</v-btn>
 
         <v-btn 
-          @click="modalConfirmacaoEmail = true" 
+          @click="submitUsuario(pegarUsuario.id)" 
           color="#CD202C" 
           dark 
           style="text-transform:none; border-radius: 9px"
@@ -100,7 +116,6 @@
             style="font-size: 16px"  
             class="mr-2"
           >mdi-content-save</v-icon>
-
           <span>Salvar</span>  
         </v-btn>
       </div>
@@ -127,7 +142,7 @@
         </span>
 
         <span style="text-align: center; font-weight: 800" class="tituloExcluir mt-3">
-          inilton@agrale.com.br
+          {{pegarUsuario.email}}
         </span>
       </div>
 
@@ -168,25 +183,25 @@
 </div>
 </template>
 
-
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator'; 
-import { mapGetters, mapActions } from "vuex";
-
-// interface headerItem {
-//   text: string,
-//   value: string,
-// }
+import { Component, Prop, Vue } from 'vue-property-decorator';
+import { mapGetters, mapActions, mapMutations } from "vuex";
+import validacoes from '@/lib/validacoes.js';
 
 @Component({
+  components:{
+    validacoes
+  },
   methods:mapActions([
     "getUsuario",
     "getUsuarioId",
     "deleteUsuario",
+    "createUsuario",
+    "updateUsuario",
   ]),
   computed: mapGetters([
     "pegarUsuario",
-    "todosUsuarios",
+    "todosUsuarios"
   ]),
 })
 
@@ -194,41 +209,85 @@ export default class App extends Vue {
   @Prop({ type: Boolean }) display: boolean;
   getUsuario!:() => Promise<[]>
   getUsuarioId!:(id:number) => Promise<[]>
-  pegarUsuario!:() => (object)
   deleteUsuario!:(id:number) => []
+  pegarUsuario!:() => (object)
+  createUsuario!:() => Promise<[]> 
+  updateUsuario!:(id:number) => []
   todosUsuarios!:() => (object)
 
-  itemsUsuarios = [];
   modalConfirmacaoEmail = false;
-  displayModalAdd = false;
-  displayModalEdit = false;
+  // displayModalAdd = false;
+  // displayModalEdit = false;
   modalExcluir = false;
-  botaoSwitch = true;
-  id: number;
+  itemsUsuarios = [];
+  id:number;
+  rules=[];
 
-  async carregarTabela(){
-    await this.getUsuario();
+  dataUsuarios: any = {
+    id: 0,
+    codigo: 0,
+    nome: "",
+    email: "",
+    perfil: "",
+    situacao: "",
+    switch: true,
+    opcoes: "",
+    cpf: ""
   }
-  async abrirModalExcluir(id:number){
-    await this.getUsuarioId(id)
-    this.modalExcluir = true
+  
+  abrirModalExcluir(id:number){
     this.id = id
-    console.log('aqui',  this.getUsuarioId(id));
-    debugger
+    this.modalExcluir = true
   }
   async deletarUsuario(id:number){
     this.deleteUsuario(id)
-    await this.getUsuario();
+    await this.getUsuario()
     this.modalExcluir = false
+    this.$emit('closeModal')
+  }
+  async submitUsuario(id:number) {
+    // this.id != null ? this.updateUsuario(id) : this.salvarUsuario()
+    this.id = id
+    if(this.id != null){
+      await this.updateUsuario(this.dataUsuarios)
+      console.log('aqui', this.id);   
+    }
+     console.log('aqui', this.id); 
   }
 
-  mounted() {
-    this.carregarTabela();
-  }
-
-  // async edicaoUsuario(id:number){
-  //   await this.getUsuarioId(id) ? this.displayModalEdit = true : this.displayModalAdd = true
+  // async editUsuario(id:number) {
+  //   await this.updateUsuario(id)
+  //   if (response.status === 200) {
+  //     this.displayAlert = true
+  //     this.alertMensage = 'Alteração registrada com sucesso'
+  //     this.closeModal()
+  //   }
   // }
+
+  // async salvarUsuario() {
+  //   const response = await this.createUsuario()
+  //   if (response.status === 200) {
+  //     this.displayAlert = true
+  //     this.alertMensage = 'Registro adicionado com sucesso'
+  //     this.closeModal()
+  //   }
+  // }
+
+  // closeModal(){
+  //   this.$refs.form.reset();
+  // }
+
+  // watch: {
+  //   display(display) {
+  //     if (display) {       
+  //       this.carregarCidades()
+  //       if (this.usuario != null) {
+  //         this.inputData = this.usuario
+  //       }
+  //     }
+  //   },
+  // }
+
 }
 </script>
 
