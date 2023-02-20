@@ -18,7 +18,7 @@
     >
     </v-text-field>
 
-    <v-btn  @click="displayModalAddEdit = true" class="button mr-3" color="#971E27">
+    <v-btn  @click="displayModalAdd= true" class="button mr-3" color="#971E27">
       <v-icon color="white" style="font-size: 20px">mdi-plus</v-icon>
       <span style="color: white">Novo</span>
     </v-btn>
@@ -26,8 +26,8 @@
 
   <!-- modal manutenção -->
   <ModalAddEdit
-    :display="displayModalAddEdit"
-    @closeModal="displayModalAddEdit = false"
+    :display="displayModalAdd || displayModalEdit"
+    @closeModal="displayModalAdd = false, displayModalEdit = false"
   ></ModalAddEdit>
 
   <!-- modal Visualização -->
@@ -137,13 +137,12 @@ export default class App extends Vue {
   deleteUsuario!:(id:number) => []
   todosUsuarios!:() => (object)
 
-  switch = true;
-  displayModalAddEdit = false;
+  displayModalAdd = false;
+  displayModalEdit = false;
   modalExcluir = false;
   displayModalVisualizar = false;
   itemsUsuarios = [];
-  id:number;
-
+  id: number;
 
   headers = [
     { text: 'Código', value: 'codigo' },
@@ -163,13 +162,14 @@ export default class App extends Vue {
     await this.getUsuarioId(id)
     this.displayModalVisualizar = true
   }
-  async abrirModalExcluir(id:number){
+  abrirModalExcluir(id:number){
     this.modalExcluir = true
     this.id = id
   }
   async abrirModalEdit(id:number){
-    this.displayModalAddEdit = true
     await this.getUsuarioId(id)
+    this.id = id
+    this.displayModalEdit = true
   }
   async deletarUsuario(id:number){
     await this.deleteUsuario(id)

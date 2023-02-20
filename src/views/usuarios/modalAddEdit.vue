@@ -3,13 +3,15 @@
   <v-dialog v-model="display" width="800px">
     <div class="elevation-2 d-flex justify-space-between pa-4" style="background: #F5F5F5">
       <div class="d-flex align-center">
-        <h1 class="titulo mr-4">Criar Usuário Agrale</h1>
+        <h1 class="titulo mr-4">
+          {{pegarUsuario.id ? 'Editar Usuário Agrale' : 'Criar Usuário Agrale'}}
+        </h1>
         <v-switch  
           hide-details 
           dense 
-          :label="this.switch === true ? 'Ativo':'Inativo'" 
+          :label="pegarUsuario.situacao === 'Ativo' ? 'Ativo' : 'Inativo'" 
           color="#CD202C"
-          v-model="this.switch"
+          :v-model="pegarUsuario.situacao == 'Ativo' ? this.botaoSwitch = true : this.botaoSwitch = false"
         ></v-switch>
       </div>
 
@@ -20,7 +22,7 @@
     </div>
 
     <div class="white d-flex flex-column pa-5 justify-space-between" style="height:400px">
-      <v-form  style="width: 100%">
+      <v-form class="form" style="width: 100%">
         <div class="d-flex">
           <v-text-field
             label="Nome Completo"
@@ -28,7 +30,7 @@
             class="mr-4 formAdd"
             style="width: 50%"
             dense
-          >{{pegarUsuario.nome}}</v-text-field>
+          >aaqui{{pegarUsuario.nome}}</v-text-field>
 
           <v-text-field
             class="formAdd"
@@ -36,16 +38,31 @@
             filled
             style="width: 50%"
             dense
-          ></v-text-field>
+          >{{pegarUsuario.cpf}}</v-text-field>
         </div>
 
         <div class="d-flex">
+          <div class="d-flex flex-column mr-4" style="width: 50%;" v-if="pegarUsuario.id">
+            <v-input
+              label="E-mail"
+              filled
+              class="mr-4 mb-2 input"
+              dense
+              hide-details
+              style="width: 50%"
+            ></v-input>
+            <span class="span">
+              {{pegarUsuario.email}}
+            </span>
+          </div>
+
           <v-text-field
             label="E-mail"
             filled
             class="mr-4 formAdd"
             style="width: 50%"
             dense
+            v-else
           ></v-text-field>
 
           <v-select
@@ -54,7 +71,15 @@
             style="width: 50%"
             class="formAdd"
             dense
-          ></v-select>
+            :items="['Desenvolvedor','Desenvolvedora']"
+          >{{pegarUsuario.perfil}}</v-select>
+        </div>
+
+        <div class="d-flex justify-end" v-if="pegarUsuario.id" @click="abrirModalExcluir(id)">
+          <v-btn outlined class="button" style="border: solid 1px #E6E6E6">
+            <v-icon class="mr-1" style="font-size: 18px">mdi-delete</v-icon>
+            <span>Excluir usuário</span>  
+          </v-btn>
         </div>
       </v-form>
 
@@ -121,6 +146,25 @@
       </div>
     </div>
   </v-dialog>
+
+  <!-- modal de excluir -->
+  <v-dialog v-model="modalExcluir" width="340px">
+    <div class="white">
+      <div class="d-flex justify-center" style="background: #FFD3D3; height: 90px">
+        <v-icon style="font-size: 50px" color="#E10000">mdi-alert-octagon</v-icon>
+      </div>
+
+      <div class="pa-3 d-flex justify-center">
+        <span class="tituloExcluir" style="text-align: center;">Tem certeza de que deseja excluir este <br> 
+        usuário? Essa ação não pode ser revertida.</span>
+      </div>
+
+      <div class="px-3 pb-3 mt-1 d-flex justify-space-between">
+        <v-btn class="buttonExcluir" text @click="modalExcluir = false">Cancelar</v-btn>
+        <v-btn class="buttonExcluir" dark color="#E10000" @click="deletarUsuario(id)">Excluir</v-btn>
+      </div>
+    </div>
+  </v-dialog>
 </div>
 </template>
 
@@ -134,28 +178,70 @@ import { mapGetters, mapActions } from "vuex";
 //   value: string,
 // }
 
-
 @Component({
   methods:mapActions([
+    "getUsuario",
     "getUsuarioId",
+    "deleteUsuario",
   ]),
   computed: mapGetters([
-    "pegarUsuario"
+    "pegarUsuario",
+    "todosUsuarios",
   ]),
 })
 
 export default class App extends Vue {
   @Prop({ type: Boolean }) display: boolean;
-  getUsuarioId!:() => Promise<[]>
+  getUsuario!:() => Promise<[]>
+  getUsuarioId!:(id:number) => Promise<[]>
   pegarUsuario!:() => (object)
+  deleteUsuario!:(id:number) => []
+  todosUsuarios!:() => (object)
 
-  switch = true;
+  itemsUsuarios = [];
   modalConfirmacaoEmail = false;
+  displayModalAdd = false;
+  displayModalEdit = false;
+  modalExcluir = false;
+  botaoSwitch = true;
+  id: number;
 
+  async carregarTabela(){
+    await this.getUsuario();
+  }
+  async abrirModalExcluir(id:number){
+    await this.getUsuarioId(id)
+    this.modalExcluir = true
+    this.id = id
+    console.log('aqui',  this.getUsuarioId(id));
+    debugger
+  }
+  async deletarUsuario(id:number){
+    this.deleteUsuario(id)
+    await this.getUsuario();
+    this.modalExcluir = false
+  }
+
+  mounted() {
+    this.carregarTabela();
+  }
+
+  // async edicaoUsuario(id:number){
+  //   await this.getUsuarioId(id) ? this.displayModalEdit = true : this.displayModalAdd = true
+  // }
 }
 </script>
 
 <style scoped>
+.span{
+  color:#4D4D4D;
+  font-weight:700;
+  font-family:Verdana;
+  font-size:12px
+}
+.input.v-input {
+  flex:none;
+}
 .v-btn:not(.v-btn--round).v-size--default {
   padding: 0 10px !important;
 }

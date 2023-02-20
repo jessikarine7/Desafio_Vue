@@ -12,7 +12,7 @@
       style="width: 15%; border-right: solid 2px #d3d3d388"
       clearable
     ></v-select>
-
+    
     <v-text-field
       prepend-inner-icon="mdi-magnify"
       label="Pesquisar por Código ou Nome"
