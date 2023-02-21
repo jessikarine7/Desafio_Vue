@@ -13,12 +13,12 @@
         <v-btn               
           hide-details
           dense 
-          :color="pegarUsuario.situacao === 'Ativo' ? '#107154' : '#CCCCCC'"
+          :color="pegarUsuario.situacao === true ? '#107154' : '#CCCCCC'"
           v-model="pegarUsuario.situacao"
           class="button"
         >
-          <span :style="{color: pegarUsuario.situacao === 'Ativo' ? '#fff' : '#4D4D4D'}">
-            {{pegarUsuario.situacao === 'Ativo' ? 'Ativo' : 'Inativo'}}
+          <span :style="{color: pegarUsuario.situacao === true ? '#fff' : '#4D4D4D'}">
+            {{pegarUsuario.situacao === true ? 'Ativo' : 'Inativo'}}
           </span>
         </v-btn>
       </div>

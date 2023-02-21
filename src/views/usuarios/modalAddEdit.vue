@@ -1,6 +1,17 @@
 <template>
 <div>
   <v-dialog v-model="display" width="800px">
+    <v-alert
+      dismissible
+      type="success"
+      width="30%"
+      style="position: absolute; top: 10%; right: 1%; z-index: 9999"
+      v-show="alertSuccess"
+      transition="scroll-x-reverse-transition"
+    >
+      {{ alertSuccessText }}
+    </v-alert>
+
     <div class="elevation-2 d-flex justify-space-between pa-4" style="background: #F5F5F5">
       <div class="d-flex align-center">
         <h1 class="titulo mr-4">
@@ -30,7 +41,8 @@
             class="mr-4 formAdd"
             style="width: 50%"
             dense
-            v-model="pegarUsuario.nome"
+            :value="pegarUsuario.nome"
+            @input="dataUsuarios.nome = $event"
             clearable
             :rules="[rules.required, rules.nome]"
           ></v-text-field>
@@ -41,7 +53,8 @@
             filled
             style="width: 50%"
             dense
-            v-model="pegarUsuario.cpf"
+            :value="pegarUsuario.cpf"
+            @input="dataUsuarios.cpf = $event"
             clearable
           ></v-text-field>
         </div>
@@ -69,7 +82,8 @@
             dense
             v-else
             clearable
-            v-model="pegarUsuario.email"
+            :value="pegarUsuario.email"
+            @input="dataUsuarios.email = $event"
             :rules="[rules.required, rules.email]"
           ></v-text-field>
 
@@ -80,7 +94,8 @@
             class="formAdd"
             dense
             clearable
-            v-model="pegarUsuario.perfil"
+            :value="pegarUsuario.perfil"  
+            @input="dataUsuarios.perfil = $event"
             :rules="[rules.required]"
             :items="['Desenvolvedor','Desenvolvedora']"
           ></v-select>
@@ -184,14 +199,11 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue, Mixins } from 'vue-property-decorator';
 import { mapGetters, mapActions, mapMutations } from "vuex";
-import validacoes from '@/lib/validacoes.js';
+import {validacoes} from '@/mixins/validacoes';
 
 @Component({
-  components:{
-    validacoes
-  },
   methods:mapActions([
     "getUsuario",
     "getUsuarioId",
@@ -205,7 +217,7 @@ import validacoes from '@/lib/validacoes.js';
   ]),
 })
 
-export default class App extends Vue {
+export default class App extends Mixins(validacoes) {
   @Prop({ type: Boolean }) display: boolean;
   getUsuario!:() => Promise<[]>
   getUsuarioId!:(id:number) => Promise<[]>
@@ -216,12 +228,14 @@ export default class App extends Vue {
   todosUsuarios!:() => (object)
 
   modalConfirmacaoEmail = false;
+  alertSuccess = false;
+  alertSuccessText = false;
   // displayModalAdd = false;
   // displayModalEdit = false;
   modalExcluir = false;
   itemsUsuarios = [];
   id:number;
-  rules=[];
+  // rules:any;
 
   dataUsuarios: any = {
     id: 0,
@@ -244,15 +258,21 @@ export default class App extends Vue {
     await this.getUsuario()
     this.modalExcluir = false
     this.$emit('closeModal')
+    this.$emit("alert-success", {
+      alertSuccess: true,
+      alertSuccessText: 'Usuário excluido com sucesso',
+    });
   }
   async submitUsuario(id:number) {
     // this.id != null ? this.updateUsuario(id) : this.salvarUsuario()
-    this.id = id
-    if(this.id != null){
-      await this.updateUsuario(this.dataUsuarios)
-      console.log('aqui', this.id);   
+    console.log(this.dataUsuarios);
+    this.dataUsuarios.id = id
+    if(id != null){
+      await this.updateUsuario(id)
+      console.log('aqui', id);   
+    }else{
+      await this.createUsuario()
     }
-     console.log('aqui', this.id); 
   }
 
   // async editUsuario(id:number) {

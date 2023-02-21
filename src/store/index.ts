@@ -55,8 +55,8 @@ const store = new Vuex.Store({
         console.log(response.data);
       })
     },
-    async updateUsuario({commit},id){
-      return await axios.put(`http://localhost:3000/usuarios/${(id)}`)
+    async updateUsuario({commit},data){
+      return await axios.put(`http://localhost:3000/usuarios/${(data.id)}`, data)
       .then((response) => {
         commit('preencherUsuarios',response.data[0])
         console.log(response.data[0]);
