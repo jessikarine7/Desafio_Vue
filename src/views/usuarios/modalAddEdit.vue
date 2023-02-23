@@ -16,7 +16,7 @@
     <div class="elevation-2 d-flex justify-space-between pa-4" style="background: #F5F5F5">
       <div class="d-flex align-center">
         <h1 class="tituloModal mr-4">
-          {{pegarUsuario.id ? 'Editar Usuário Agrale '+ pegarUsuario.codigo : 'Criar Usuário Agrale'}}
+          {{pegarUsuario.id ? 'Editar Usuário Agrale '+ pegarUsuario.id : 'Criar Usuário Agrale'}}
         </h1>
         <v-switch  
           hide-details 
@@ -36,7 +36,7 @@
     </div>
 
     <div class="white d-flex flex-column pa-5 justify-space-between" style="height:400px">
-      <v-form class="form" style="width: 100%">
+      <v-form class="form" ref="form" style="width: 100%">
         <div class="d-flex">
           <v-text-field
             label="Nome Completo"
@@ -45,7 +45,6 @@
             class="mr-4 form"
             style="width: 50%"
             dense
-            :rules="[rules.required]"
             :value="pegarUsuario.nome"
             @input="dataUsuarios.nome = $event"
             clearable
@@ -133,7 +132,22 @@
         >Cancelar</v-btn>
 
         <v-btn 
+          v-if="pegarUsuario.id"
           @click="submitUsuario(pegarUsuario.id)" 
+          color="#CD202C" 
+          dark 
+          class="btn"
+        >
+          <v-icon 
+            style="font-size: 16px"  
+            class="mr-2"
+          >mdi-content-save</v-icon>
+          <span>Salvar</span>  
+        </v-btn>
+
+        <v-btn 
+          v-else
+          @click="modalConfirmacaoEmail = true" 
           color="#CD202C" 
           dark 
           class="btn"
@@ -167,7 +181,7 @@
           cadastro.
         </span>
 
-        <span class="tituloExcluir mt-3">
+        <span class="tituloExcluir mt-3" style="text-align: center;">
           {{dataUsuarios.email}}
         </span>
       </div>
@@ -183,7 +197,7 @@
           class="btn btnExcluir" 
           style="color:#1A1A1A" 
           color="#F7D002"
-          @click="submitUsuario(dataUsuarios.id)" 
+          @click="submitUsuario(pegarUsuario.id)"
         >Confirmar E-mail</v-btn>
       </div>
     </div>
@@ -231,7 +245,6 @@
 import { Component, Prop, Mixins, Watch } from 'vue-property-decorator';
 import { mapGetters, mapActions } from "vuex";
 import {validacoes} from '@/mixins/validacoes';
-// import { watch } from 'vue';
 
 @Component({
   methods:mapActions([
@@ -253,7 +266,7 @@ export default class App extends Mixins(validacoes) {
   getUsuarioId!:(id:number) => Promise<[]>
   deleteUsuario!:(id:number) => []
   pegarUsuario!:() => (object)
-  createUsuario!:() => Promise<[]> 
+  createUsuario!:(params) => Promise<[]> 
   updateUsuario!:(id:number) => []
   todosUsuarios!:() => (object)
 
@@ -264,11 +277,10 @@ export default class App extends Mixins(validacoes) {
   alertSuccess = false;
   alertSuccessText = '';
   switch = false;
-  switch2='Inativo'
+  // rules=['cpf','required', 'email'];
 
   dataUsuarios: any = {
     id: 0,
-    codigo: 0,
     nome: "",
     email: "",
     perfil: "",
@@ -284,9 +296,9 @@ export default class App extends Mixins(validacoes) {
     console.log('watch',value);
   }
   resetFomr(){
-    // this.$refs.form.reset()
     this.$emit('closeModal');
-    // (this.$refs.form as any).reset();
+    (this.$refs.form as any).reset();
+    window.location.reload();
   }
   alertas(){
     this.alertSuccess = true
@@ -294,7 +306,7 @@ export default class App extends Mixins(validacoes) {
       this.alertSuccessText
       setTimeout(() => {
         this.alertSuccess = false;
-      }, 5000);
+      }, 3000);
     }
   }
   abrirModalExcluir(id:number){
@@ -306,11 +318,9 @@ export default class App extends Mixins(validacoes) {
     await this.getUsuario()
     this.modalExcluir = false
     this.$emit('closeModal')
-  
     this.alertas()
     this.alertSuccessText = 'Usuário [e-mail do usuário] excluído com sucesso.';
   }
-
   async submitUsuario(id:number) {
     console.log('data', id);
     this.dataUsuarios.id = id
@@ -319,17 +329,20 @@ export default class App extends Mixins(validacoes) {
       await this.updateUsuario(this.dataUsuarios)
       await this.getUsuario();
       this.$emit('closeModal')
-
       this.alertas()
       this.alertSuccessText = 'Registro alterado com sucesso.'
-    }else{
-      await this.createUsuario()
-      this.modalConfirmacaoEmail= true
-      await this.getUsuario();
-      this.$emit('closeModal')
 
-      this.alertas()
-      this.alertSuccessText = 'Registro salvo com sucesso.'
+    }else{
+      this.modalConfirmacaoEmail = true
+      if(this.modalConfirmacaoEmail === true){
+        await this.createUsuario(this.dataUsuarios)
+        this.alertas()
+        this.alertSuccessText = 'Registro salvo com sucesso.'
+        await this.getUsuario();    
+      }
+      this.resetFomr()
+      this.$emit('closeModal')
+      this.modalConfirmacaoEmail = false
     }
   }
 }
@@ -337,11 +350,6 @@ export default class App extends Mixins(validacoes) {
 
 <style scoped lang="scss">
 @import "@/assets/scss/_base.scss";
-
-.v-list .v-list-item--active{
-  color: red !important;
-  caret-color: red !important;
-}
 
 .input.v-input {
   flex:none;

@@ -1,24 +1,8 @@
-# desafio-agrale
+#Para inicializar a api utilize o comando abixo:
 
-## Project setup
-```
-npm install
-```
+---> npm run api
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+#Em outro terminal, para inicializar o projeto utilize o comando abaixo:
 
-### Compiles and minifies for production
-```
-npm run build
-```
+---> npm run serve
 
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).

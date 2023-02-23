@@ -184,7 +184,7 @@ export default class App extends Vue {
   pesquisa = false;
 
   headers = [
-    { text: 'Código', value: 'codigo' },
+    { text: 'Código', value: 'id' },
     { text: 'Nome Completo', value: 'nome' },
     { text: 'E-mail', value: 'email' },
     { text: 'Perfil do Usuário', value: 'perfil' },

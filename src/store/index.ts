@@ -48,12 +48,8 @@ const store = new Vuex.Store({
         console.log(response.data[0]);
       })
     },
-    async createUsuario({commit}, payload){
-     return await axios.post(`http://localhost:3000/usuarios/`,payload.data)
-      .then((response) => {
-        commit('preencherUsuarios',response.data)
-        console.log('post',response.data);
-      })
+    async createUsuario({commit},payload){
+      return await axios.post(`http://localhost:3000/usuarios`, payload)
     },
     async updateUsuario({commit},data){
       console.log('dataNo',data);
