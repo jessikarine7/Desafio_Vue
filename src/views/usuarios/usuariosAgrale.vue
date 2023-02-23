@@ -1,13 +1,27 @@
 <template>
 <div class="pa-2 d-flex flex-grow-1 flex-column">
-  <h1 class="pa-3" style="font-size: 25px">Usuários Agrale</h1> 
+  <v-alert
+    dismissible
+    type="success"
+    width="30%"
+    color="#107154"
+    class="alerts"
+    v-show="alertSuccess"
+    transition="scroll-x-reverse-transition"
+  >
+    {{ alertSuccessText }}
+  </v-alert>
 
-  <div class="d-flex justify-end mr-3 mb-2 align-center" style="width: 100%">
-    <div style="width: 150%"></div>
+  <h1 class="pa-3 tituloUsuario">Usuários Agrale</h1> 
+
+  <div class="d-flex justify-end mr-3 mb-2 align-end" style="width: 100%">
+    <div class="vazio" style="width: 120%"></div>
     <v-text-field 
-      id="pesquisa"
       outlined 
-      class="mr-2"
+      class="mr-2 pesquisa"
+      @click="pesquisa = !pesquisa"
+      :style="pesquisa == true ? 'width: 110%' : 'Width:20%'"
+      color="#CD202C"
       label="Pesquisa"
       prepend-inner-icon="mdi-magnify"
       hide-details
@@ -18,7 +32,11 @@
     >
     </v-text-field>
 
-    <v-btn  @click="displayModalAdd= true" class="button mr-3" color="#971E27">
+    <v-btn  
+      @click="displayModalAdd= true" 
+      class="btn btnPreenchido mr-3" 
+      color="#CD202C"
+    >
       <v-icon color="white" style="font-size: 20px">mdi-plus</v-icon>
       <span style="color: white">Novo</span>
     </v-btn>
@@ -40,17 +58,35 @@
   <v-dialog v-model="modalExcluir" width="340px">
     <div class="white">
       <div class="d-flex justify-center" style="background: #FFD3D3; height: 90px">
-        <v-icon style="font-size: 50px" color="#E10000">mdi-alert-octagon</v-icon>
+        <v-icon 
+          class="iconModalExcluir" 
+          color="#E10000"
+        >mdi-alert-octagon</v-icon>
       </div>
 
       <div class="pa-3 d-flex justify-center">
-        <span class="tituloExcluir" style="text-align: center;">Tem certeza de que deseja excluir este <br> 
-        usuário? Essa ação não pode ser revertida.</span>
+        <span 
+          class="tituloExcluir" 
+          style="text-align: center;"
+        >
+          Tem certeza de que deseja excluir este <br> 
+          usuário? Essa ação não pode ser revertida.
+        </span>
       </div>
 
       <div class="px-3 pb-3 mt-1 d-flex justify-space-between">
-        <v-btn class="buttonExcluir" text @click="modalExcluir = false">Cancelar</v-btn>
-        <v-btn class="buttonExcluir" dark color="#E10000" @click="deletarUsuario(id)">Excluir</v-btn>
+        <v-btn 
+          class="btn btnExcluir" 
+          text 
+          @click="modalExcluir = false"
+        >Cancelar</v-btn>
+
+        <v-btn 
+          class="btn btnExcluir" 
+          dark 
+          color="#E10000" 
+          @click="deletarUsuario(id)"
+        >Excluir</v-btn>
       </div>
     </div>
   </v-dialog>
@@ -66,7 +102,7 @@
         <v-btn
           :color="item.situacao == true ? '#107154' : '#CCCCCC'"
           dark
-          style="text-transform:none; border-radius: 9px"
+          class="btn btnTabela"
         >
           <span>{{item.situacao == true? 'Ativo':'Inativo'}}</span>
         </v-btn>
@@ -82,17 +118,17 @@
 
           <v-list class="d-flex flex-column" dense >
             <v-list-item @click="abrirModalVisualizar(item.id)"> 
-              <v-icon style="font-size: 20px" class="mr-2">mdi-eye</v-icon>
+              <v-icon class="mr-2 iconTabela">mdi-eye</v-icon>
               <v-list-item-title>Visualizar</v-list-item-title>
             </v-list-item>
 
             <v-list-item @click="abrirModalEdit(item.id)">
-              <v-icon style="font-size: 20px" class="mr-2">mdi-pencil</v-icon>
+              <v-icon class="mr-2 iconTabela">mdi-pencil</v-icon>
               <v-list-item-title>Editar</v-list-item-title>
             </v-list-item>
 
             <v-list-item @click="abrirModalExcluir(item.id)">
-              <v-icon style="font-size: 20px" class="mr-2">mdi-delete</v-icon>
+              <v-icon class="mr-2 iconTabela">mdi-delete</v-icon>
               <v-list-item-title>Excluir</v-list-item-title>
             </v-list-item>
           </v-list>
@@ -104,15 +140,15 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Vue } from 'vue-property-decorator';
 import ModalAddEdit from './modalAddEdit.vue';
 import ModalVisualizar from './modalVisualizar.vue';
 import { mapGetters, mapActions } from "vuex";
 
-interface headers {
-  text: string,
-  value: string,
-}
+// interface headers {
+//   text: string,
+//   value: string,
+// }
 
 @Component({
   components:{
@@ -143,6 +179,9 @@ export default class App extends Vue {
   displayModalVisualizar = false;
   itemsUsuarios = [];
   id: number;
+  alertSuccess = false;
+  alertSuccessText = '';
+  pesquisa = false;
 
   headers = [
     { text: 'Código', value: 'codigo' },
@@ -175,6 +214,12 @@ export default class App extends Vue {
     await this.deleteUsuario(id)
     await this.getUsuario();
     this.modalExcluir = false
+    
+    this.alertSuccess = true;
+    this.alertSuccessText = 'Usuário [e-mail do usuário] excluído com sucesso.';
+    setTimeout(() => {
+      this.alertSuccess = false;
+    }, 5000);
   }
   
   mounted() {
@@ -185,37 +230,11 @@ export default class App extends Vue {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "@/assets/scss/_base.scss";
+
 .v-application .primary--text{
   width: 150% !important;
-  color:#971E27 !important; 
-  caret-color:#971E27 !important;
-}
-/* div /deep/ .v-icon.notranslate.mdi.mdi-magnify.theme--light{
-  color:#971E27 !important;
-} */
-div /deep/ .v-text-field--outlined.v-input--is-focused fieldset, .v-text-field--outlined.v-input--has-state fieldset {
-  border: solid 1px #971E27 !important;
-  color:#971E27 !important;
-}
-.button {
-  border-radius: 8px !important;
-  text-transform: none !important; 
-  border: solid 1px #d3d3d3da;
-  color:#4D4D4D;
-  min-height: 40px;
-}
-.buttonExcluir {
-  border-radius: 8px !important;
-  text-transform: none !important; 
-  width: 130px;
-}
-.tituloExcluir{
-  font-family:  'Verdana';
-  font-size: 14px;
-  font-weight: 500;
-  letter-spacing: 0px;
-  color: #1A1A1A;
 }
 .v-btn:not(.v-btn--round).v-size--default {
   padding: 0 10px !important;
@@ -229,5 +248,11 @@ div /deep/ .v-text-field--outlined.v-input--is-focused fieldset, .v-text-field--
 .v-input--selection-controls {
   margin-top: 0px !important; 
   padding-top: 0px !important;
+}
+
+::v-deep .v-text-field--outlined.v-input--is-focused fieldset, .v-text-field--outlined.v-input--has-state fieldset {
+  border: solid 1.5px #971E27 !important;
+  color:#971E27 !important;
+  // caret-color:#971E27 !important;
 }
 </style>

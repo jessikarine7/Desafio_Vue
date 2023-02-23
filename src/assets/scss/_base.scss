@@ -1,0 +1,71 @@
+.btn{
+  text-transform: none !important; 
+  border-radius: 8px;
+  font-family: Verdana;
+  font-weight: 700;
+  font-size: 12px;
+}
+.btnPreenchido{
+  border: solid 1px #d3d3d3da;
+  min-height: 40px;
+  background: #CD202C;
+  font-size: 13px;
+}
+.btnTabela{
+  width: 50px;
+  font-weight: 400;
+}
+.btnExcluir{
+  width: 45%;
+}
+.span{
+  color:#4D4D4D;
+  font-weight:700;
+  font-family: Verdana;
+  font-size:12px
+}
+.tituloExcluir{
+  font-family: Verdana;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0px;
+  color: #1A1A1A;
+}
+.form{
+  font-family: Verdana;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+}
+.tituloModal{
+  font-family: Verdana;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 17px;
+  color: #1A1A1A;
+  letter-spacing: -1px;
+}
+.tituloUsuario{
+  font-family: Verdana;
+  font-weight: 700;
+  font-size: 20px;
+  color: #1A1A1A;
+}
+.formVisualizar{
+  width: 100%; 
+  border: solid 1px #E6E6E6; 
+  border-radius: 10px;
+}
+.alerts{
+  position: absolute; 
+  top: 10%; 
+  right: 1%; 
+  z-index: 9999; 
+  border-radius: 8px;
+}
+.iconTabela{
+  font-size: 20px
+}
+.iconModalExcluir{
+  font-size: 50px;
+}

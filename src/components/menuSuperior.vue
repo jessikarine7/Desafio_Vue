@@ -8,6 +8,7 @@
       solo
       class="input"
       hide-details
+      color="#8C8C8C"
       dense
       style="width: 15%; border-right: solid 2px #d3d3d388"
       clearable
@@ -17,6 +18,7 @@
       prepend-inner-icon="mdi-magnify"
       label="Pesquisar por Código ou Nome"
       style="width: 25%"
+      color="#8C8C8C"
       solo
       class="input"
       hide-details
@@ -38,6 +40,10 @@ export default class App extends Vue {
 </script>
 
 <style scoped>
+/* .input .v-application .primary--text{
+  color: none !important;
+  caret-color: none !important;
+} */
 .input >>>  .v-input__control > .v-input__slot{
   box-shadow: 0px 0px 0px 0px !important;
   border-radius: 0px !important;

@@ -1,33 +1,36 @@
 <template>
 <div>
-  <v-dialog v-model="display" width="800px">
-    <v-alert
-      dismissible
-      type="success"
-      width="30%"
-      style="position: absolute; top: 10%; right: 1%; z-index: 9999"
-      v-show="alertSuccess"
-      transition="scroll-x-reverse-transition"
-    >
-      {{ alertSuccessText }}
-    </v-alert>
+  <v-alert
+    dismissible
+    type="success"
+    width="30%"
+    color="#107154"
+    class="alerts"
+    v-show="alertSuccess"
+    transition="scroll-x-reverse-transition"
+  >
+    {{ alertSuccessText }}
+  </v-alert>
 
+  <v-dialog v-model="display" width="800px">
     <div class="elevation-2 d-flex justify-space-between pa-4" style="background: #F5F5F5">
       <div class="d-flex align-center">
-        <h1 class="titulo mr-4">
-          {{pegarUsuario.id ? 'Editar Usuário Agrale' : 'Criar Usuário Agrale'}}
+        <h1 class="tituloModal mr-4">
+          {{pegarUsuario.id ? 'Editar Usuário Agrale '+ pegarUsuario.codigo : 'Criar Usuário Agrale'}}
         </h1>
         <v-switch  
           hide-details 
           dense 
-          :label="pegarUsuario.situacao === true ? 'Ativo' : 'Inativo'" 
+          @change="dataUsuarios.situacao"
+          :label="pegarUsuario.situacao == true? 'Ativo': 'Inativo'" 
           color="#CD202C"
-          v-model="pegarUsuario.situacao"
+          :input-value="pegarUsuario.situacao"
+          @input="dataUsuarios.situacao = $event"
         ></v-switch>
       </div>
 
       <v-icon 
-        @click="$emit('closeModal')" 
+        @click="resetFomr()" 
         color="#1A1A1A"
       >mdi-close</v-icon>
     </div>
@@ -38,21 +41,26 @@
           <v-text-field
             label="Nome Completo"
             filled
-            class="mr-4 formAdd"
+            color="#8C8C8C"
+            class="mr-4 form"
             style="width: 50%"
             dense
+            :rules="[rules.required]"
             :value="pegarUsuario.nome"
             @input="dataUsuarios.nome = $event"
             clearable
-            :rules="[rules.required, rules.nome]"
           ></v-text-field>
 
           <v-text-field
-            class="formAdd"
+            class="form"
+            
             label="CPF(opcional)"
+            v-mask="'###.###.###-##'"
+            hide-details
             filled
             style="width: 50%"
             dense
+            color="#8C8C8C"
             :value="pegarUsuario.cpf"
             @input="dataUsuarios.cpf = $event"
             clearable
@@ -76,23 +84,26 @@
 
           <v-text-field
             label="E-mail"
+            :rules="[rules.required, rules.email]"
             filled
-            class="mr-4 formAdd"
+            class="mr-4 form"
             style="width: 50%"
+            color="#8C8C8C"
             dense
             v-else
             clearable
+            validate-on-blur
             :value="pegarUsuario.email"
             @input="dataUsuarios.email = $event"
-            :rules="[rules.required, rules.email]"
           ></v-text-field>
 
           <v-select
             label="Perfil de Usuário"
             filled
             style="width: 50%"
-            class="formAdd"
+            class="form"
             dense
+            color="#8C8C8C"
             clearable
             :value="pegarUsuario.perfil"  
             @input="dataUsuarios.perfil = $event"
@@ -104,7 +115,7 @@
         <div class="d-flex justify-end" v-if="pegarUsuario.id">
           <v-btn 
             outlined 
-            class="button" 
+            class="btn" 
             style="border: solid 1px #E6E6E6" 
             @click="abrirModalExcluir(pegarUsuario.id)"
           >
@@ -117,15 +128,15 @@
       <div class="d-flex justify-space-between justify-end">
         <v-btn 
           text 
-          style="text-transform:none;" 
-          @click="$emit('closeModal')"
+          class="btn"
+          @click="resetFomr()"
         >Cancelar</v-btn>
 
         <v-btn 
           @click="submitUsuario(pegarUsuario.id)" 
           color="#CD202C" 
           dark 
-          style="text-transform:none; border-radius: 9px"
+          class="btn"
         >
           <v-icon 
             style="font-size: 16px"  
@@ -156,22 +167,23 @@
           cadastro.
         </span>
 
-        <span style="text-align: center; font-weight: 800" class="tituloExcluir mt-3">
-          {{pegarUsuario.email}}
+        <span class="tituloExcluir mt-3">
+          {{dataUsuarios.email}}
         </span>
       </div>
 
       <div class="pa-3 d-flex justify-space-between">
         <v-btn 
-          class="buttonExcluir" 
+          class="btn btnExcluir" 
           text 
           @click="modalConfirmacaoEmail = false"
         >Alterar E-mail</v-btn>
 
         <v-btn 
-          class="buttonExcluir" 
+          class="btn btnExcluir" 
           style="color:#1A1A1A" 
           color="#F7D002"
+          @click="submitUsuario(dataUsuarios.id)" 
         >Confirmar E-mail</v-btn>
       </div>
     </div>
@@ -181,17 +193,34 @@
   <v-dialog v-model="modalExcluir" width="340px">
     <div class="white">
       <div class="d-flex justify-center" style="background: #FFD3D3; height: 90px">
-        <v-icon style="font-size: 50px" color="#E10000">mdi-alert-octagon</v-icon>
+        <v-icon 
+          class="iconModalExcluir" 
+          color="#E10000"
+        >mdi-alert-octagon</v-icon>
       </div>
 
       <div class="pa-3 d-flex justify-center">
-        <span class="tituloExcluir" style="text-align: center;">Tem certeza de que deseja excluir este <br> 
-        usuário? Essa ação não pode ser revertida.</span>
+        <span 
+          class="tituloExcluir" 
+          style="text-align: center;"
+        > Tem certeza de que deseja excluir este <br> 
+          usuário? Essa ação não pode ser revertida.
+        </span>
       </div>
 
       <div class="px-3 pb-3 mt-1 d-flex justify-space-between">
-        <v-btn class="buttonExcluir" text @click="modalExcluir = false">Cancelar</v-btn>
-        <v-btn class="buttonExcluir" dark color="#E10000" @click="deletarUsuario(id)">Excluir</v-btn>
+        <v-btn 
+          class="btn btnExcluir" 
+          text 
+          @click="modalExcluir = false"
+          >Cancelar</v-btn>
+
+        <v-btn 
+          class="btn btnExcluir" 
+          dark 
+          color="#E10000" 
+          @click="deletarUsuario(id)"
+        >Excluir</v-btn>
       </div>
     </div>
   </v-dialog>
@@ -199,9 +228,10 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Mixins } from 'vue-property-decorator';
-import { mapGetters, mapActions, mapMutations } from "vuex";
+import { Component, Prop, Mixins, Watch } from 'vue-property-decorator';
+import { mapGetters, mapActions } from "vuex";
 import {validacoes} from '@/mixins/validacoes';
+// import { watch } from 'vue';
 
 @Component({
   methods:mapActions([
@@ -228,14 +258,13 @@ export default class App extends Mixins(validacoes) {
   todosUsuarios!:() => (object)
 
   modalConfirmacaoEmail = false;
-  alertSuccess = false;
-  alertSuccessText = false;
-  // displayModalAdd = false;
-  // displayModalEdit = false;
   modalExcluir = false;
   itemsUsuarios = [];
   id:number;
-  // rules:any;
+  alertSuccess = false;
+  alertSuccessText = '';
+  switch = false;
+  switch2='Inativo'
 
   dataUsuarios: any = {
     id: 0,
@@ -248,7 +277,26 @@ export default class App extends Mixins(validacoes) {
     opcoes: "",
     cpf: ""
   }
-  
+
+  @Watch('$store.state.usuarioVisualizar')
+  carregarUsuarios(value){
+    this.dataUsuarios = value
+    console.log('watch',value);
+  }
+  resetFomr(){
+    // this.$refs.form.reset()
+    this.$emit('closeModal');
+    // (this.$refs.form as any).reset();
+  }
+  alertas(){
+    this.alertSuccess = true
+    if(this.alertSuccess === true){
+      this.alertSuccessText
+      setTimeout(() => {
+        this.alertSuccess = false;
+      }, 5000);
+    }
+  }
   abrirModalExcluir(id:number){
     this.id = id
     this.modalExcluir = true
@@ -258,66 +306,43 @@ export default class App extends Mixins(validacoes) {
     await this.getUsuario()
     this.modalExcluir = false
     this.$emit('closeModal')
-    this.$emit("alert-success", {
-      alertSuccess: true,
-      alertSuccessText: 'Usuário excluido com sucesso',
-    });
+  
+    this.alertas()
+    this.alertSuccessText = 'Usuário [e-mail do usuário] excluído com sucesso.';
   }
+
   async submitUsuario(id:number) {
-    // this.id != null ? this.updateUsuario(id) : this.salvarUsuario()
-    console.log(this.dataUsuarios);
+    console.log('data', id);
     this.dataUsuarios.id = id
+
     if(id != null){
-      await this.updateUsuario(id)
-      console.log('aqui', id);   
+      await this.updateUsuario(this.dataUsuarios)
+      await this.getUsuario();
+      this.$emit('closeModal')
+
+      this.alertas()
+      this.alertSuccessText = 'Registro alterado com sucesso.'
     }else{
       await this.createUsuario()
+      this.modalConfirmacaoEmail= true
+      await this.getUsuario();
+      this.$emit('closeModal')
+
+      this.alertas()
+      this.alertSuccessText = 'Registro salvo com sucesso.'
     }
   }
-
-  // async editUsuario(id:number) {
-  //   await this.updateUsuario(id)
-  //   if (response.status === 200) {
-  //     this.displayAlert = true
-  //     this.alertMensage = 'Alteração registrada com sucesso'
-  //     this.closeModal()
-  //   }
-  // }
-
-  // async salvarUsuario() {
-  //   const response = await this.createUsuario()
-  //   if (response.status === 200) {
-  //     this.displayAlert = true
-  //     this.alertMensage = 'Registro adicionado com sucesso'
-  //     this.closeModal()
-  //   }
-  // }
-
-  // closeModal(){
-  //   this.$refs.form.reset();
-  // }
-
-  // watch: {
-  //   display(display) {
-  //     if (display) {       
-  //       this.carregarCidades()
-  //       if (this.usuario != null) {
-  //         this.inputData = this.usuario
-  //       }
-  //     }
-  //   },
-  // }
-
 }
 </script>
 
-<style scoped>
-.span{
-  color:#4D4D4D;
-  font-weight:700;
-  font-family:Verdana;
-  font-size:12px
+<style scoped lang="scss">
+@import "@/assets/scss/_base.scss";
+
+.v-list .v-list-item--active{
+  color: red !important;
+  caret-color: red !important;
 }
+
 .input.v-input {
   flex:none;
 }
@@ -330,40 +355,8 @@ export default class App extends Mixins(validacoes) {
 .v-list{
   padding: 0px 0 !important; 
 }
-.formAdd{
-  /* background: #F5F5F5; */
-  font-family: 'Verdana';
-  font-style: normal;
-  font-weight: 400;
-  font-size: 14px;
-  /* color: #4D4D4D; */
-}
-.titulo{
-  font-family: 'Verdana';
-  font-style: normal;
-  font-weight: 700;
-  font-size: 17px;
-  color: #1A1A1A;
-  letter-spacing: -1px;
-}
 .v-input--selection-controls {
   margin-top: 0px !important; 
   padding-top: 0px !important;
-}
-.button {
-  border-radius: 8px !important;
-  text-transform: none !important; 
-}
-.buttonExcluir {
-  border-radius: 8px !important;
-  text-transform: none !important; 
-  width: 150px;
-}
-.tituloExcluir{
-  font-family:  'Verdana';
-  font-size: 14px;
-  font-weight: 500;
-  letter-spacing: 0px;
-  color: #1A1A1A;
 }
 </style>

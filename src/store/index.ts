@@ -49,13 +49,15 @@ const store = new Vuex.Store({
       })
     },
     async createUsuario({commit}, payload){
-     return await axios.post(`http://localhost:3000/usuarios/POST/usuarios?ID=${(payload.id)}`)
+     return await axios.post(`http://localhost:3000/usuarios/`,payload.data)
       .then((response) => {
         commit('preencherUsuarios',response.data)
-        console.log(response.data);
+        console.log('post',response.data);
       })
     },
     async updateUsuario({commit},data){
+      console.log('dataNo',data);
+      
       return await axios.put(`http://localhost:3000/usuarios/${(data.id)}`, data)
       .then((response) => {
         commit('preencherUsuarios',response.data[0])

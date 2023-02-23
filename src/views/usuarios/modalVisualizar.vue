@@ -9,13 +9,16 @@
   <v-dialog v-model="displayVisualizar" width="800px">
     <div class="elevation-2 d-flex justify-space-between pa-4" style="background: #F5F5F5">
       <div class="d-flex align-center">
-        <h1 class="titulo mr-4">Usuário Agrale {{pegarUsuario.codigo}}</h1>
+        <h1 
+          class="tituloModal mr-4"
+        >Usuário Agrale {{pegarUsuario.codigo}}</h1>
+
         <v-btn               
           hide-details
           dense 
           :color="pegarUsuario.situacao === true ? '#107154' : '#CCCCCC'"
           v-model="pegarUsuario.situacao"
-          class="button"
+          class="btn"
         >
           <span :style="{color: pegarUsuario.situacao === true ? '#fff' : '#4D4D4D'}">
             {{pegarUsuario.situacao === true ? 'Ativo' : 'Inativo'}}
@@ -26,19 +29,18 @@
       <v-icon 
         @click="$emit('closeModal')" 
         color="#1A1A1A"
-        style="border-radius: 50%"
       >mdi-close</v-icon>
     </div>
 
     <div class="white d-flex flex-column pa-5 justify-space-between" style="height:400px">
-      <v-form class="pa-4 form">
+      <v-form class="pa-4 formVisualizar">
         <div class="d-flex pb-10">
           <div class="d-flex flex-column" style="width: 50%;">
             <v-input
               label="Nome Completo"
               filled
               hide-details
-              class="mr-4 formAdd"
+              class="mr-4 mb-2 form"
               style="width: 50%"
               dense
               :messages="[]"
@@ -50,7 +52,7 @@
 
           <div class="d-flex flex-column" style="width: 50%;">
             <v-input
-              class="formAdd"
+              class="form"
               label="CPF (opcional)"
               filled
               hide-details
@@ -70,7 +72,7 @@
             <v-input
               label="E-mail"
               filled
-              class="mr-4 formAdd"
+              class="mr-4 mb-2 form"
               style="width: 50%"
               dense
               hide-details
@@ -86,7 +88,7 @@
               label="Perfil de Usuário"
               filled
               style="width: 50%"
-              class="formAdd"
+              class="form"
               dense
               hide-details
             ></v-input>
@@ -100,14 +102,14 @@
       <div class="d-flex justify-space-between justify-end">
         <v-btn 
           text 
-          style="text-transform:none;" 
+          class="btn"
           @click="$emit('closeModal')"
         >Fechar</v-btn>
 
         <v-btn 
           outlined
-          color="Editar" 
-          style="text-transform:none; border-radius: 9px"
+          color="Editar"
+          class="btn" 
           @click="abrirModalEditar"
         >
           <v-icon 
@@ -157,36 +159,12 @@ export default class App extends Vue {
 }
 </script>
 
-<style scoped>
-.span{
-  color:#4D4D4D;
-  font-weight:700;
-  font-family:Verdana;
-  font-size:12px
-}
-.form{
-  width: 100%; 
-  border: solid 1px #E6E6E6; 
-  border-radius: 10px;
-}
-.formAdd{
-  /* background: #F5F5F5; */
-  font-family: 'Verdana';
-  font-style: normal;
-  font-weight: 400;
-  font-size: 14px;
-  /* color: #4D4D4D; */
-}
-.titulo{
-  font-family: 'Verdana';
-  font-style: normal;
-  font-weight: 700;
-  font-size: 17px;
-  color: #1A1A1A;
-  letter-spacing: -1px;
-}
-.button {
-  border-radius: 8px !important;
-  text-transform: none !important; 
-}
+<style scoped lang="scss">
+@import "@/assets/scss/_base.scss";
+
+// .v-icon.v-icon::after {
+//   height: 82% !important;
+//   transform: scale(1.0) !important; 
+//   top: 0.1 !important;
+// }
 </style>

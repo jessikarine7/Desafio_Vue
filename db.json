@@ -13,7 +13,7 @@
     {
       "id": 2,
       "codigo": 102,
-      "nome": "test2",
+      "nome": "usuario teste a",
       "email": "teste2@keyworks.com.br",
       "perfil": "Desenvolvedora",
       "situacao": true,
@@ -23,43 +23,12 @@
     {
       "id": 3,
       "codigo": 102,
-      "nome": "test2",
+      "nome": "valter santos ",
       "email": "teste2@keyworks.com.br",
-      "perfil": "Desenvolvedora",
+      "perfil": "Desenvolvedor",
       "situacao": true,
       "opcoes": "",
-      "cpf": "000.000.000-00"
-    },
-    {
-      "id": 4,
-      "codigo": 102,
-      "nome": "test2",
-      "email": "teste2@keyworks.com.br",
-      "perfil": "Desenvolvedora",
-      "situacao": true,
-      "opcoes": "",
-      "cpf": "000.000.000-00"
-    },
-    {
-      "id": 5,
-      "codigo": 102,
-      "nome": "test2",
-      "email": "teste2@keyworks.com.br",
-      "perfil": "Desenvolvedora",
-      "situacao": true,
-      "opcoes": "",
-      "cpf": "000.000.000-00"
-    },
-    {
-      "id": 6,
-      "codigo": 102,
-      "nome": "test2",
-      "email": "teste2@keyworks.com.br",
-      "perfil": "Desenvolvedora",
-      "situacao": true,
-      "opcoes": "",
-      "cpf": "000.000.000-00"
+      "cpf": "000.000.002-74"
     }
-    
   ]
 }
