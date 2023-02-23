@@ -21,11 +21,9 @@
         <v-switch  
           hide-details 
           dense 
-          @change="dataUsuarios.situacao"
-          :label="pegarUsuario.situacao == true? 'Ativo': 'Inativo'" 
+          :label="dataUsuarios.situacao == true? 'Ativo': 'Inativo'" 
           color="#CD202C"
-          :input-value="pegarUsuario.situacao"
-          @input="dataUsuarios.situacao = $event"
+          v-model="pegarUsuario.situacao"
         ></v-switch>
       </div>
 
@@ -36,7 +34,7 @@
     </div>
 
     <div class="white d-flex flex-column pa-5 justify-space-between" style="height:400px">
-      <v-form class="form" ref="form" style="width: 100%">
+      <v-form class="form" ref="form" v-model="isValid" style="width: 100%">
         <div class="d-flex">
           <v-text-field
             label="Nome Completo"
@@ -44,18 +42,19 @@
             color="#8C8C8C"
             class="mr-4 form"
             style="width: 50%"
+            validate-on-blur
             dense
+            clearable
             :value="pegarUsuario.nome"
             @input="dataUsuarios.nome = $event"
-            clearable
+            :rules="[rules.required, rules.nameValidation]"
           ></v-text-field>
 
           <v-text-field
             class="form"
-            
+            :rules="[rules.cpf]"
             label="CPF(opcional)"
-            v-mask="'###.###.###-##'"
-            hide-details
+            validate-on-blur
             filled
             style="width: 50%"
             dense
@@ -133,6 +132,7 @@
 
         <v-btn 
           v-if="pegarUsuario.id"
+          :disabled="!isValid"
           @click="submitUsuario(pegarUsuario.id)" 
           color="#CD202C" 
           dark 
@@ -147,6 +147,7 @@
 
         <v-btn 
           v-else
+          :disabled="!isValid"
           @click="modalConfirmacaoEmail = true" 
           color="#CD202C" 
           dark 
@@ -277,7 +278,7 @@ export default class App extends Mixins(validacoes) {
   alertSuccess = false;
   alertSuccessText = '';
   switch = false;
-  // rules=['cpf','required', 'email'];
+  isValid = false;
 
   dataUsuarios: any = {
     id: 0,
@@ -326,19 +327,23 @@ export default class App extends Mixins(validacoes) {
     this.dataUsuarios.id = id
 
     if(id != null){
-      await this.updateUsuario(this.dataUsuarios)
-      await this.getUsuario();
-      this.$emit('closeModal')
-      this.alertas()
-      this.alertSuccessText = 'Registro alterado com sucesso.'
-
-    }else{
-      this.modalConfirmacaoEmail = true
-      if(this.modalConfirmacaoEmail === true){
-        await this.createUsuario(this.dataUsuarios)
+      if (this.isValid){
+        await this.updateUsuario(this.dataUsuarios)
+        await this.getUsuario();
         this.alertas()
-        this.alertSuccessText = 'Registro salvo com sucesso.'
-        await this.getUsuario();    
+        this.alertSuccessText = 'Registro alterado com sucesso.'
+      }
+      this.$emit('closeModal')
+    }else{
+      // (this.$refs.form as any).validate()
+      if(this.isValid){
+        this.modalConfirmacaoEmail = true
+        if(this.modalConfirmacaoEmail === true){
+          await this.createUsuario(this.dataUsuarios)
+          await this.getUsuario();    
+          this.alertas()
+          this.alertSuccessText = 'Registro salvo com sucesso.'
+        }
       }
       this.resetFomr()
       this.$emit('closeModal')

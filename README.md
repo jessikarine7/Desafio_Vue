@@ -1,4 +1,4 @@
-#Para inicializar a api utilize o comando abixo:
+#Para inicializar a api utilize o comando abaixo:
 
 ---> npm run api
 

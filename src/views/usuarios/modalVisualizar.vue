@@ -11,7 +11,7 @@
       <div class="d-flex align-center">
         <h1 
           class="tituloModal mr-4"
-        >Usuário Agrale {{pegarUsuario.codigo}}</h1>
+        >Usuário Agrale {{pegarUsuario.id}}</h1>
 
         <v-btn               
           hide-details
@@ -162,9 +162,4 @@ export default class App extends Vue {
 <style scoped lang="scss">
 @import "@/assets/scss/_base.scss";
 
-// .v-icon.v-icon::after {
-//   height: 82% !important;
-//   transform: scale(1.0) !important; 
-//   top: 0.1 !important;
-// }
 </style>
