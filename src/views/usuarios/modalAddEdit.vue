@@ -152,7 +152,7 @@
           @click="modalConfirmacaoEmail = true" 
           color="#CD202C" 
           dark 
-          class="btn"
+          class="btn botaoSalvar"
         >
           <v-icon 
             style="font-size: 16px"  
@@ -280,6 +280,7 @@ export default class App extends Mixins(validacoes) {
   alertSuccessText = '';
   switch = false;
   isValid = false;
+  disabledColor: string;
 
   dataUsuarios: any = {
     id: 0,
@@ -296,10 +297,11 @@ export default class App extends Mixins(validacoes) {
   carregarUsuarios(value){
     this.dataUsuarios = value
   }
-  resetFomr(){
+  async resetFomr(){
     this.$emit('closeModal');
     (this.$refs.form as any).reset();
     window.location.reload();
+    //  await this.getUsuario();
   }
   alertas(){
     this.alertSuccess = true
@@ -328,26 +330,24 @@ export default class App extends Mixins(validacoes) {
     if(id != null){
       if (this.isValid){
         await this.updateUsuario(this.dataUsuarios)
-        await this.getUsuario();
+        // await this.getUsuario();
+        this.$emit('closeModal')
         this.alertas()
         this.alertSuccessText = 'Registro alterado com sucesso.'
       }
       this.resetFomr()
-      this.$emit('closeModal')
+
     }else{
-      // (this.$refs.form as any).validate()
       if(this.isValid){
         this.modalConfirmacaoEmail = true
-        
-          await this.createUsuario(this.dataUsuarios)
-          await this.getUsuario();    
-          this.alertas()
-          this.alertSuccessText = 'Registro salvo com sucesso.'
-        
+        await this.createUsuario(this.dataUsuarios)
+        // await this.getUsuario();    
+        this.$emit('closeModal')
+        this.alertas()
+        this.alertSuccessText = 'Registro salvo com sucesso.'
       }
-      this.resetFomr()
-      this.$emit('closeModal')
       this.modalConfirmacaoEmail = false
+      this.resetFomr()
     }
   }
 }

@@ -47,8 +47,8 @@
 
   <!-- modal manutenção -->
   <ModalAddEdit
-    :display="displayModalAdd || displayModalEdit"
-    @closeModal="displayModalAdd = false, displayModalEdit = false"
+    :display="displayModalAdd ? displayModalAdd : displayModalEdit"
+    @closeModal="displayModalAdd ? displayModalAdd = false : displayModalEdit = false"
   ></ModalAddEdit>
 
   <!-- modal Visualização -->
@@ -179,6 +179,7 @@ export default class App extends Vue {
   alertSuccess = false;
   alertSuccessText = '';
   pesquisa = false;
+  search = '';
 
   headers = [
     { text: 'Código', value: 'id' },
