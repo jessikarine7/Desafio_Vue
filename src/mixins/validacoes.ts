@@ -54,7 +54,7 @@ export class validacoes extends Vue{
         return true
   
       } else {
-        return false
+        return true
       }
     },
   }

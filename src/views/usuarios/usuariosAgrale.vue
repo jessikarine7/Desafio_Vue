@@ -17,10 +17,13 @@
   <div class="d-flex justify-end mr-3 mb-2 align-end" style="width: 100%">
     <div class="vazio" style="width: 120%"></div>
     <v-text-field 
-      outlined 
       class="mr-2 pesquisa"
-      @click="pesquisa = !pesquisa"
-      :style="pesquisa == true ? 'width: 110%' : 'Width:20%'"
+      @blur="pesquisa = false"
+      @click="pesquisa = true"
+      :style="pesquisa == true ? 'width: 120%' : 'Width:30%'"
+      v-model="search"
+      outlined 
+      clearable
       color="#CD202C"
       label="Pesquisa"
       prepend-inner-icon="mdi-magnify"
@@ -97,6 +100,7 @@
       :items="todosUsuarios"
       class="elevation-1"
       :items-per-page="10"
+      :search="search"
     >
       <template v-slot:[`item.situacao`] = {item}>
         <v-btn
@@ -145,11 +149,6 @@ import ModalAddEdit from './modalAddEdit.vue';
 import ModalVisualizar from './modalVisualizar.vue';
 import { mapGetters, mapActions } from "vuex";
 
-// interface headers {
-//   text: string,
-//   value: string,
-// }
-
 @Component({
   components:{
     ModalAddEdit,
@@ -166,8 +165,6 @@ import { mapGetters, mapActions } from "vuex";
 })
 
 export default class App extends Vue {
-  // @Prop(Array) display: string[];
-  // headers: number[] = [];
   getUsuario!:() => Promise<[]>
   getUsuarioId!:(id:number) => Promise<[]>
   deleteUsuario!:(id:number) => []
@@ -194,8 +191,6 @@ export default class App extends Vue {
 
   async carregarTabela(){
     await this.getUsuario();
-    // this.itemsUsuarios = this.$store.getters.todosUsuarios;
-    // console.log(this.itemsUsuarios);
   }
   async abrirModalVisualizar(id:number){
     await this.getUsuarioId(id)
@@ -224,8 +219,6 @@ export default class App extends Vue {
   
   mounted() {
     this.carregarTabela();
-    // this.headers = [1,2,3];
-    // console.log(this.headers);
   }
 }
 </script>
@@ -233,9 +226,6 @@ export default class App extends Vue {
 <style lang="scss" scoped>
 @import "@/assets/scss/_base.scss";
 
-.v-application .primary--text{
-  width: 150% !important;
-}
 .v-btn:not(.v-btn--round).v-size--default {
   padding: 0 10px !important;
 }

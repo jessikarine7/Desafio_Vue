@@ -27,7 +27,7 @@
       </div>
 
       <v-icon 
-        @click="$emit('closeModal')" 
+        @click="resetFomr()" 
         color="#1A1A1A"
       >mdi-close</v-icon>
     </div>
@@ -103,7 +103,7 @@
         <v-btn 
           text 
           class="btn"
-          @click="$emit('closeModal')"
+          @click="resetFomr()"
         >Fechar</v-btn>
 
         <v-btn 
@@ -152,6 +152,10 @@ export default class App extends Vue {
   displayModalAdd = false;
   status = true;
 
+  resetFomr(){
+    this.$emit('closeModal');
+    window.location.reload();
+  }
   abrirModalEditar(){
     this.displayModalEdit = true
     this.$emit('closeModal')

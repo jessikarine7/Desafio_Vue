@@ -102,6 +102,7 @@
             class="form"
             dense
             color="#8C8C8C"
+            validate-on-blur
             clearable
             :value="pegarUsuario.perfil"  
             @input="dataUsuarios.perfil = $event"
@@ -294,7 +295,6 @@ export default class App extends Mixins(validacoes) {
   @Watch('$store.state.usuarioVisualizar')
   carregarUsuarios(value){
     this.dataUsuarios = value
-    console.log('watch',value);
   }
   resetFomr(){
     this.$emit('closeModal');
@@ -323,7 +323,6 @@ export default class App extends Mixins(validacoes) {
     this.alertSuccessText = 'Usuário [e-mail do usuário] excluído com sucesso.';
   }
   async submitUsuario(id:number) {
-    console.log('data', id);
     this.dataUsuarios.id = id
 
     if(id != null){
@@ -333,17 +332,18 @@ export default class App extends Mixins(validacoes) {
         this.alertas()
         this.alertSuccessText = 'Registro alterado com sucesso.'
       }
+      this.resetFomr()
       this.$emit('closeModal')
     }else{
       // (this.$refs.form as any).validate()
       if(this.isValid){
         this.modalConfirmacaoEmail = true
-        if(this.modalConfirmacaoEmail === true){
+        
           await this.createUsuario(this.dataUsuarios)
           await this.getUsuario();    
           this.alertas()
           this.alertSuccessText = 'Registro salvo com sucesso.'
-        }
+        
       }
       this.resetFomr()
       this.$emit('closeModal')

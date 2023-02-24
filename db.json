@@ -2,12 +2,12 @@
   "usuarios": [
     {
       "id": 1,
-      "nome": "Jéssica Karine Santos",
+      "nome": "Jessica Karine Santos",
       "email": "jessica.santos@keyworks.com.br",
       "perfil": "Desenvolvedora",
       "situacao": true,
       "opcoes": "",
-      "cpf": "963.000.160-80"
+      "cpf": "81515470814"
     },
     {
       "nome": "teste novo",
