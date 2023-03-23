@@ -10,14 +10,14 @@
       "cpf": "81515470814"
     },
     {
-      "nome": "teste novo",
+      "nome": "Teste novo",
       "email": "teste@teste.com",
-      "perfil": "Desenvolvedor",
-      "situacao": false,
+      "perfil": "Desenvolvedora",
+      "situacao": "",
       "switch": true,
       "opcoes": "",
-      "cpf": "210.942.260-25",
-      "id": 6
+      "cpf": "787.288.830-04",
+      "id": 2
     }
   ]
 }

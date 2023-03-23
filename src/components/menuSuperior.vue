@@ -2,7 +2,7 @@
 <div class="d-flex justify-start menu">
   <div class="d-flex flex-row align-start" style="width: 48%">
     <v-select
-      label="Consulta por Chassi"
+      :label="labelChassi"
       :items="itemsChassi"
       prepend-inner-icon="mdi-magnify"
       solo
@@ -16,7 +16,7 @@
     
     <v-text-field
       prepend-inner-icon="mdi-magnify"
-      label="Pesquisar por Código ou Nome"
+      :label="labelPesquisa"
       style="width: 25%"
       color="#8C8C8C"
       solo
@@ -30,12 +30,16 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component,Prop, Vue } from 'vue-property-decorator';
 @Component
 export default class App extends Vue {
-  itemsChassi = [
-    'chassi 1', 'chassi 2'
-  ];
+  @Prop({ type: String, default: 'Consulta por Chassi' }) labelChassi: string;
+  @Prop({ type: Array, default: ['chassi 1','chassi 2']}) itemsChassi: any;
+  @Prop({ type: String, default: 'Pesquisar por Código ou Nome' }) labelPesquisa: string;
+
+  // itemsChassi = [
+  //   'chassi 1', 'chassi 2'
+  // ];
 }
 </script>
 

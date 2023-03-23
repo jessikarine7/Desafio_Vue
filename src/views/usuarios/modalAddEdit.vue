@@ -12,6 +12,12 @@
     {{ alertSuccessText }}
   </v-alert>
 
+  <!-- modal de excluir -->
+  <ModalExcluir
+    :displayExcluir="displayModalExcluir"
+    @closeModal="displayModalExcluir = false"
+  ></ModalExcluir>
+
   <v-dialog v-model="display" width="800px">
     <div class="elevation-2 d-flex justify-space-between pa-4" style="background: #F5F5F5">
       <div class="d-flex align-center">
@@ -163,8 +169,7 @@
       </div>
     </div>
   </v-dialog>
- 
-  <!-- modal confirmação de email -->
+
   <v-dialog v-model="modalConfirmacaoEmail" width="380px">
     <div class="white">
       <div class="d-flex justify-center" style="background: #F6E9B9DB; height: 90px">
@@ -204,42 +209,6 @@
       </div>
     </div>
   </v-dialog>
-
-  <!-- modal de excluir -->
-  <v-dialog v-model="modalExcluir" width="340px">
-    <div class="white">
-      <div class="d-flex justify-center" style="background: #FFD3D3; height: 90px">
-        <v-icon 
-          class="iconModalExcluir" 
-          color="#E10000"
-        >mdi-alert-octagon</v-icon>
-      </div>
-
-      <div class="pa-3 d-flex justify-center">
-        <span 
-          class="tituloExcluir" 
-          style="text-align: center;"
-        > Tem certeza de que deseja excluir este <br> 
-          usuário? Essa ação não pode ser revertida.
-        </span>
-      </div>
-
-      <div class="px-3 pb-3 mt-1 d-flex justify-space-between">
-        <v-btn 
-          class="btn btnExcluir" 
-          text 
-          @click="modalExcluir = false"
-          >Cancelar</v-btn>
-
-        <v-btn 
-          class="btn btnExcluir" 
-          dark 
-          color="#E10000" 
-          @click="deletarUsuario(id)"
-        >Excluir</v-btn>
-      </div>
-    </div>
-  </v-dialog>
 </div>
 </template>
 
@@ -247,12 +216,15 @@
 import { Component, Prop, Mixins, Watch } from 'vue-property-decorator';
 import { mapGetters, mapActions } from "vuex";
 import {validacoes} from '@/mixins/validacoes';
+import ModalExcluir from '../../components/ModalExcluir.vue';
 
 @Component({
+  components:{
+    ModalExcluir
+  },
   methods:mapActions([
     "getUsuario",
     "getUsuarioId",
-    "deleteUsuario",
     "createUsuario",
     "updateUsuario",
   ]),
@@ -266,14 +238,13 @@ export default class App extends Mixins(validacoes) {
   @Prop({ type: Boolean }) display: boolean;
   getUsuario!:() => Promise<[]>
   getUsuarioId!:(id:number) => Promise<[]>
-  deleteUsuario!:(id:number) => []
   pegarUsuario!:() => (object)
   createUsuario!:(params) => Promise<[]> 
   updateUsuario!:(id:number) => []
   todosUsuarios!:() => (object)
 
   modalConfirmacaoEmail = false;
-  modalExcluir = false;
+  displayModalExcluir = false;
   itemsUsuarios = [];
   id:number;
   alertSuccess = false;
@@ -314,15 +285,7 @@ export default class App extends Mixins(validacoes) {
   }
   abrirModalExcluir(id:number){
     this.id = id
-    this.modalExcluir = true
-  }
-  async deletarUsuario(id:number){
-    this.deleteUsuario(id)
-    await this.getUsuario()
-    this.modalExcluir = false
-    this.$emit('closeModal')
-    this.alertas()
-    this.alertSuccessText = 'Usuário [e-mail do usuário] excluído com sucesso.';
+    this.displayModalExcluir = true
   }
   async submitUsuario(id:number) {
     this.dataUsuarios.id = id

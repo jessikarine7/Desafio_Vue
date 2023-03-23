@@ -3,33 +3,39 @@
   <div>
     <div text class="d-flex align-center flex-column pa-2 mt-3">
       <v-icon style="font-size: 25px" color="#4D4D4D">mdi-home</v-icon>
-      <span class="font">Home</span>
+      <span class="font">{{labelHome}}</span>
     </div>
 
     <div class="mt-4 d-flex align-center flex-column pa-2">
       <v-icon style="font-size: 25px" color="#4D4D4D">mdi-account-hard-hat</v-icon>
-      <span class="font">Assistência</span>
-      <span class="font">Técnica</span>
+      <span class="font" style="text-align: center">{{labelAssistencia}}</span>
     </div>
 
     <div class="mt-4 d-flex align-center flex-column pa-2">
-      <v-btn  color="#971E27" class="mb-1" style="border-radius: 10px">
+      <v-btn :color="corButtonAdm" class="mb-1" style="border-radius: 10px">
         <v-icon style="font-size: 23px" color="white">mdi-cogs</v-icon>
       </v-btn>
-      <span class="font">Administração</span>
+      <span class="font">{{labelButtonAdm}}</span>
     </div>
   </div>
 
-  <v-btn fab class="mb-6 d-flex align-center"  color="#971E27">
-    <span style="color: white; font-size: 18px">IN</span>
+  <v-btn fab class="mb-6 mt-4 d-flex align-center" :color="corButtonIN">
+    <span style="color: white; font-size: 18px">{{labelButtonIN}}</span>
   </v-btn>
 </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue } from 'vue-property-decorator';
 @Component
-export default class App extends Vue {}
+export default class App extends Vue {
+  @Prop({ type: String, default: 'Home' }) labelHome: string;
+  @Prop({ type: String, default: 'Assistência' }) labelAssistencia: string;
+  @Prop({ type: String, default: '#971E27' }) corButtonAdm: string;
+  @Prop({ type: String, default: 'Administração' }) labelButtonAdm: string;
+  @Prop({ type: String, default: 'IN' }) labelButtonIN: string;
+  @Prop({ type: String, default: '#971E27' }) corButtonIN: string;
+}
 </script>
 
 <style scoped>

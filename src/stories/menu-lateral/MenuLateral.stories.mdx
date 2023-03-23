@@ -1,0 +1,104 @@
+import { Meta, Story } from '@storybook/addon-docs'
+import { action } from '@storybook/addon-actions'
+import { linkTo } from '@storybook/addon-links'
+import MenuLateral from '../../components/menuLateral.vue'
+
+export const Template = (args, { argTypes }) => {
+  return {
+    title: 'MenuLateral',
+    components: { MenuLateral },
+    props: Object.keys(argTypes),
+    template: `
+      <MenuLateral 
+        :labelHome="label_Home"
+        :labelAssistencia="label_Assistencia"
+        :labelButtonAdm="label_Button_Adm"
+        :corButtonAdm="cor_Button_Adm"
+        :labelButtonIN="label_Button_IN"
+        :corButtonIN="cor_Button_IN"
+      >
+      </MenuLateral>
+    `,
+    methods: { action: action('clicked') },
+  }
+};
+
+<Meta 
+  title="MenuLateral" 
+  component={ MenuLateral }
+/>
+
+<Story 
+  name="Primary"
+  args={{
+    label_Home: 'Home',
+    label_Assistencia: 'Assistência Técnica',
+    label_Button_Adm: 'Administração',
+    label_Button_IN:'IN'
+  }}
+  argTypes={{
+    label_Home: {
+      description: 'Label da opção home',
+      table: {
+        category: 'Props',
+        type: { summary: 'prop' },
+        defaultValue: {
+          summary: 'Home'
+        }
+      }
+    },
+    label_Assistencia:{
+      description: 'Label da opção Assistência',
+      table: {
+        category: 'Props',
+        type: { summary: 'prop' },
+        defaultValue: {
+          summary: 'Assistência Técnica' 
+        }
+      }
+    },
+    label_Button_Adm:{
+      description: 'Label do botão de administração',
+      table: {
+        category: 'Props',
+        type: { summary: 'prop' },
+        defaultValue: {
+          summary: 'Administração' 
+        }
+      }
+    },
+    cor_Button_Adm: {
+      description: 'Cor do botão administração',
+      control: {
+        type: 'color',
+        presetColors: ['#971E27', '#21cc84']
+      },
+      table: {
+        category: 'Props',
+        type: { summary: 'prop' },
+      }
+    },
+    label_Button_IN: {
+      description: 'Label do botão que mostra as iniciais do usuário',
+      table: {
+        category: 'Props',
+        type: { summary: 'prop' },
+        defaultValue: {
+          summary: 'IN'
+        }
+      }
+    },
+    cor_Button_IN:{
+      description: 'Cor do botão que mostra as iniciais do usuário',
+      control: {
+        type: 'color',
+        presetColors: ['#971E27', '#21cc84']
+      },
+      table: {
+        category: 'Props',
+        type: { summary: 'prop' },
+      }
+    }
+  }}>
+  {Template.bind({})}
+</Story>

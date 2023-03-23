@@ -12,38 +12,17 @@
     {{ alertSuccessText }}
   </v-alert>
 
-  <h1 class="pa-3 tituloUsuario">Usuários Agrale</h1> 
-
-  <div class="d-flex justify-end mr-3 mb-2 align-end" style="width: 100%">
-    <div class="vazio" style="width: 120%"></div>
-    <v-text-field 
-      class="mr-2 pesquisa"
-      @blur="pesquisa = false"
-      @click="pesquisa = true"
-      :style="pesquisa == true ? 'width: 120%' : 'Width:30%'"
-      v-model="search"
-      outlined 
-      clearable
-      color="#CD202C"
-      label="Pesquisa"
-      prepend-inner-icon="mdi-magnify"
-      hide-details
-      dense
-      style="border-radius: 8px"
-      single-line
-      placeholder="Pesquisar por Código, Nome completo, E-mail ou Perfil de Usuário"
-    >
-    </v-text-field>
-
-    <v-btn  
-      @click="displayModalAdd= true" 
-      class="btn btnPreenchido mr-3" 
-      color="#CD202C"
-    >
-      <v-icon color="white" style="font-size: 20px">mdi-plus</v-icon>
-      <span style="color: white">Novo</span>
-    </v-btn>
-  </div>
+  <!-- Componente Head -->
+  <MyHeader
+    @pesquisar="search = $event"
+  >
+    <template #modal-add-edit="{ displayModalAdd }">
+      <!-- modal manutenção -->
+      <ModalAddEdit
+        :display="displayModalAdd"
+      ></ModalAddEdit>
+    </template>
+  </MyHeader>
 
   <!-- modal manutenção -->
   <ModalAddEdit
@@ -58,47 +37,16 @@
   ></ModalVisualizar>
 
   <!-- modal de excluir -->
-  <v-dialog v-model="modalExcluir" width="340px">
-    <div class="white">
-      <div class="d-flex justify-center" style="background: #FFD3D3; height: 90px">
-        <v-icon 
-          class="iconModalExcluir" 
-          color="#E10000"
-        >mdi-alert-octagon</v-icon>
-      </div>
-
-      <div class="pa-3 d-flex justify-center">
-        <span 
-          class="tituloExcluir" 
-          style="text-align: center;"
-        >
-          Tem certeza de que deseja excluir este <br> 
-          usuário? Essa ação não pode ser revertida.
-        </span>
-      </div>
-
-      <div class="px-3 pb-3 mt-1 d-flex justify-space-between">
-        <v-btn 
-          class="btn btnExcluir" 
-          text 
-          @click="modalExcluir = false"
-        >Cancelar</v-btn>
-
-        <v-btn 
-          class="btn btnExcluir" 
-          dark 
-          color="#E10000" 
-          @click="deletarUsuario(id)"
-        >Excluir</v-btn>
-      </div>
-    </div>
-  </v-dialog>
-
+  <ModalExcluir
+    :displayExcluir="displayModalExcluir"
+    @closeModal="displayModalExcluir = false"
+  ></ModalExcluir>
+  
   <div class="pa-3">
     <v-data-table
+      class="elevation-1"
       :headers="headers"
       :items="todosUsuarios"
-      class="elevation-1"
       :items-per-page="10"
       :search="search"
     >
@@ -148,16 +96,19 @@ import { Component, Vue } from 'vue-property-decorator';
 import ModalAddEdit from './modalAddEdit.vue';
 import ModalVisualizar from './modalVisualizar.vue';
 import { mapGetters, mapActions } from "vuex";
+import MyHeader from '../../components/MyHeader.vue';
+import ModalExcluir from '../../components/ModalExcluir.vue';
 
 @Component({
   components:{
     ModalAddEdit,
-    ModalVisualizar
+    ModalVisualizar,
+    MyHeader,
+    ModalExcluir
   },
   methods:mapActions([
     "getUsuario",
     "getUsuarioId",
-    "deleteUsuario",
   ]),
   computed:mapGetters([
     "todosUsuarios"
@@ -167,12 +118,11 @@ import { mapGetters, mapActions } from "vuex";
 export default class App extends Vue {
   getUsuario!:() => Promise<[]>
   getUsuarioId!:(id:number) => Promise<[]>
-  deleteUsuario!:(id:number) => []
   todosUsuarios!:() => (object)
 
   displayModalAdd = false;
   displayModalEdit = false;
-  modalExcluir = false;
+  displayModalExcluir = false;
   displayModalVisualizar = false;
   itemsUsuarios = [];
   id: number;
@@ -197,27 +147,15 @@ export default class App extends Vue {
     await this.getUsuarioId(id)
     this.displayModalVisualizar = true
   }
-  abrirModalExcluir(id:number){
-    this.modalExcluir = true
-    this.id = id
+  async abrirModalExcluir(id:number){
+    this.displayModalExcluir = true
+    await this.getUsuarioId(id)
   }
   async abrirModalEdit(id:number){
     await this.getUsuarioId(id)
     this.id = id
     this.displayModalEdit = true
   }
-  async deletarUsuario(id:number){
-    await this.deleteUsuario(id)
-    await this.getUsuario();
-    this.modalExcluir = false
-    
-    this.alertSuccess = true;
-    this.alertSuccessText = 'Usuário [e-mail do usuário] excluído com sucesso.';
-    setTimeout(() => {
-      this.alertSuccess = false;
-    }, 5000);
-  }
-  
   mounted() {
     this.carregarTabela();
   }

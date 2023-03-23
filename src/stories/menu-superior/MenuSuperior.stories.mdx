@@ -1,0 +1,77 @@
+import { Meta, Story } from '@storybook/addon-docs'
+import { action } from '@storybook/addon-actions'
+import { linkTo } from '@storybook/addon-links'
+import MenuSuperior from '../../components/menuSuperior.vue'
+
+export const Template = (args, { argTypes }) => {
+  return {
+    title: 'MenuSuperior',
+    components: { MenuSuperior },
+    props: Object.keys(argTypes),
+    template: `
+      <MenuSuperior 
+        :labelChassi="label_chassi"
+        :itemsChassi="items_chassi"
+        :labelPesquisa="label_pesquisa"
+      >
+      </MenuSuperior>
+    `,
+    methods: { action: action('clicked') },
+  }
+};
+
+<Meta 
+  title="MenuSuperior" 
+  component={ MenuSuperior }
+/>
+
+<Story 
+  name="Primary"
+  args={{
+    label_chassi: 'Consulta por Chassi',
+    items_chassi: ['chassi 1','chassi 2'],
+    label_pesquisa: 'Pesquisar por Código ou Nome',
+  }}
+  argTypes={{
+    label_chassi: {
+      description: 'Label do select de consulta do chassi',
+      table: {
+        category: 'Props',
+        type: { summary: 'prop' },
+        defaultValue: {
+          summary: 'Consulta por Chassi'
+        }
+      }
+    },
+    items_chassi: { 
+      description: 'items da consulta do chassi',
+      control: 'select', 
+      options: ['chassi 1','chassi 2'],
+      table: {
+        category: 'Props',
+        type: { summary: 'prop' },
+      }
+    },
+    label_pesquisa:{
+      description: 'Label do textfield de pesquisa',
+      table: {
+        category: 'Props',
+        type: { summary: 'prop' },
+        defaultValue: {
+          summary: 'Pesquisar por Código ou Nome'
+        }
+      }
+    },
+    icons: {
+      description: 'Ícone do select e textfield, foi usado o --> prepend-inner-icon, para deixar o ícone dentro do campo e no início',
+      table: {
+        category: 'Props',
+        type: { summary: 'prop' },
+        defaultValue: {
+          summary: 'mdi-magnify'
+        }
+      }
+    }
+  }}>
+  {Template.bind({})}
+</Story>

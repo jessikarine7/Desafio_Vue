@@ -1,0 +1,124 @@
+import { Meta, Story } from '@storybook/addon-docs'
+import MyHeader from '../../components/MyHeader.vue'
+import { action } from '@storybook/addon-actions'
+import { linkTo } from '@storybook/addon-links'
+
+export const Template = (args, { argTypes }) => {
+  console.log(argTypes);
+  return {
+    title: 'MyHeader',
+    components: { MyHeader },
+    props: Object.keys(argTypes),
+    template: `
+      <MyHeader 
+        @pesquisar="action" 
+        :titulo="titulo" 
+        :buttonCollor="color_button"
+        :labelPesquisa="label_textfield"
+        :placeholderPesquisa="placeholder_textfield"
+      >
+        <template #modal-add-edit="{ displayModalAdd }">
+          <span 
+            v-if="displayModalAdd" 
+            class="mr-4 d-flex justify-end span" 
+          > 
+            Abre o Modal Adicionar 
+          </span>
+        </template>
+      </MyHeader>
+    `,
+    methods: { action: action('clicked') },
+  }
+};
+
+<Meta 
+  title="MyHeader" 
+  component={ MyHeader }
+/>
+
+<Story 
+  name="Primary"
+  args={{
+    titulo: 'Usuários Agrale',
+    label_textfield: 'Pesquisa',
+    placeholder_textfield: 'Pesquisar por Código, Nome completo, E-mail ou Perfil de Usuário',
+    pesquisar: {}
+  }}
+  argTypes={{
+    titulo: {
+      description: 'Título da tela',
+      table: {
+        category: 'Props',
+        type: { summary: 'prop' },
+        defaultValue: {
+          summary: 'Usuários Agrale'
+        }
+      }
+    },
+    label_textfield: {
+      description: 'Label do textfiel de pesquisa quando está inativo',
+      table: {
+        category: 'Props',
+        type: { summary: 'prop' },
+        defaultValue: {
+          summary: 'Pesquisa'
+        }
+      }
+    },
+    placeholder_textfield:{
+      description: 'Label do textfiel de pesquisa quando está ativo',
+      table: {
+        category: 'Props',
+        type: { summary: 'prop'},
+        defaultValue: {
+          summary: 'Pesquisar por Código, Nome completo, E-mail ou Perfil de Usuário'
+        }
+      }
+    },
+    pesquisar: {
+      type: 'event',
+      description: 'Faz a pesquisa na tabela de usários',
+      table: {
+        category: 'events',
+        type: {
+          summary: 'emit'
+        },
+      }
+    },
+    icon_textfield: {
+      description: 'Ícone do textfield, foi usado o --> prepend-inner-icon, para deixar o ícone dentro do campo e no início',
+      table: {
+        category: 'Props',
+        type: { summary: 'prop' },
+        defaultValue: {
+          summary: 'mdi-magnify'
+        }
+      }
+    },
+    color_button: {
+      description: 'Cor do botão adicionar',
+      control: {
+        type: 'color',
+        presetColors: ['#CD202C', '#21cc84']
+      },
+      table: {
+        category: 'Props',
+        type: { summary: 'prop' },
+        defaultValue: {
+          summary: '+ Novo'
+        }
+      }
+    },
+    icon_button: {
+      description: 'Ícone do botão adicionar',
+      table: {
+        category: 'Props',
+        type: { summary: 'prop' },
+        defaultValue: {
+          summary: 'mdi-plus'
+        }
+      }
+    }
+  }}>
+  {Template.bind({})}
+</Story>
