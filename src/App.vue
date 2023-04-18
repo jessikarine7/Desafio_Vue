@@ -23,7 +23,11 @@ import menuSuperior from './components/menuSuperior.vue';
     menuSuperior,
   },
 })
-export default class App extends Vue {}
+
+export default class App extends Vue {
+  name: 'app'
+}
+
 </script>
 
 <style>

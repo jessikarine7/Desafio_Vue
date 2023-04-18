@@ -1,0 +1,43 @@
+import { Meta, Story } from '@storybook/addon-docs'
+import { action } from '@storybook/addon-actions'
+import { linkTo } from '@storybook/addon-links'
+import ModalExcluir from '../../components/ModalExcluir.vue'
+
+export const Template = (args, { argTypes }) => {
+  return {
+    title: 'ModalExcluir',
+    components: { ModalExcluir },
+    props: Object.keys(argTypes),
+    template: `
+      <ModalExcluir 
+      >
+      </ModalExcluir>
+    `,
+    methods: { action: action('clicked') },
+  }
+};
+
+<Meta 
+  title="ModalExcluir" 
+  component={ ModalExcluir }
+/>
+
+<Story 
+  name="Primary"
+  args={{
+    label_Home: 'Home'
+  }}
+  argTypes={{
+    label_Home: {
+      description: 'Label da opção home',
+      table: {
+        category: 'Props',
+        type: { summary: 'prop' },
+        defaultValue: {
+          summary: 'Home'
+        }
+      }
+    },
+  }}>
+  {Template.bind({})}
+</Story>

@@ -32,18 +32,18 @@
       </div>
 
       <div class="px-3 pb-3 mt-1 d-flex justify-space-between">
-        <v-btn 
+        <!-- <v-btn 
           class="btn btnExcluir" 
           text 
           @click="fecharModal()"
-        >Cancelar</v-btn>
+        >Cancelar</v-btn> -->
 
-        <v-btn 
+        <!-- <v-btn 
           class="btn btnExcluir" 
           dark 
           color="#E10000" 
           @click="deletarUsuario(pegarUsuario.id)"
-        >Excluir</v-btn>
+        >Excluir</v-btn> -->
       </div>
     </div>
   </v-dialog>
@@ -52,42 +52,42 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { mapActions,mapGetters } from "vuex";
+// import { mapActions,mapGetters } from "vuex";
 
 @Component({
-  methods:mapActions([
-    "getUsuario",
-    "deleteUsuario",
-  ]),
-  computed: mapGetters([
-    "pegarUsuario",
-  ]),
+  // methods:mapActions([
+  //   "getUsuario",
+  //   "deleteUsuario",
+  // ]),
+  // computed: mapGetters([
+  //   "pegarUsuario",
+  // ]),
 })
 
 export default class App extends Vue {
   @Prop({ type: Boolean }) displayExcluir: boolean;
-  getUsuario!:() => Promise<[]>
-  deleteUsuario!:(id:number) => []
-  pegarUsuario!:() => (object)
+  // getUsuario!:() => Promise<[]>
+  // deleteUsuario!:(id:number) => []
+  // pegarUsuario!:() => (object)
 
   id: number; 
   displayModalExcluir = false; 
   alertSuccess = false;
   alertSuccessText = '';
 
-  async deletarUsuario(id:number){
-    this.deleteUsuario(id)
-    await this.getUsuario();
-    this.fecharModal()
+  // async deletarUsuario(id:number){
+  //   this.deleteUsuario(id)
+  //   await this.getUsuario();
+  //   this.fecharModal()
 
-    this.alertSuccess = true;
-    this.alertSuccessText = 'Usuário [e-mail do usuário] excluído com sucesso.';
-    setTimeout(() => {
-      this.alertSuccess = false;
-    }, 5000);
+  //   this.alertSuccess = true;
+  //   this.alertSuccessText = 'Usuário [e-mail do usuário] excluído com sucesso.';
+  //   setTimeout(() => {
+  //     this.alertSuccess = false;
+  //   }, 5000);
 
-    window.location.reload();
-  }
+  //   window.location.reload();
+  // }
   fecharModal(){
     this.$emit('closeModal');
   }
