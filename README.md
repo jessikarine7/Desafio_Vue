@@ -6,3 +6,6 @@
 
 ---> npm run serve
 
+#Para inicializar o storybook dê o seginte comando
+
+--> npm run storybook:serve
