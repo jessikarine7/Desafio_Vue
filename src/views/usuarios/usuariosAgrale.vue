@@ -12,6 +12,12 @@
     {{ alertSuccessText }}
   </v-alert>
 
+  <div class="d-flex justify-end mr-4">
+    <v-btn icon style="background:#8C8C8C">
+      <v-icon color="white">mdi-chevron-right</v-icon>
+    </v-btn>
+  </div>
+
   <!-- Componente Head -->
   <MyHeader
     @pesquisar="search = $event"
@@ -44,7 +50,7 @@
   
   <div class="pa-3">
     <v-data-table
-      class="elevation-1"
+      class="elevation-1 font"
       :headers="headers"
       :items="todosUsuarios"
       :items-per-page="10"
@@ -92,23 +98,25 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, } from 'vue-property-decorator';
 import ModalAddEdit from './modalAddEdit.vue';
 import ModalVisualizar from './modalVisualizar.vue';
 import { mapGetters, mapActions } from "vuex";
 import MyHeader from '../../components/MyHeader.vue';
 import ModalExcluir from '../../components/ModalExcluir.vue';
+// import VueRouter, { Route } from 'vue-router';
 
 @Component({
   components:{
     ModalAddEdit,
     ModalVisualizar,
     MyHeader,
-    ModalExcluir
+    ModalExcluir,
   },
   methods:mapActions([
     "getUsuario",
     "getUsuarioId",
+    "getSolicitacaoId",
   ]),
   computed:mapGetters([
     "todosUsuarios"
@@ -132,7 +140,7 @@ export default class App extends Vue {
   search = '';
 
   headers = [
-    { text: 'Código', value: 'id' },
+    { text: 'Código', value: 'id', size:'80%'},
     { text: 'Nome Completo', value: 'nome' },
     { text: 'E-mail', value: 'email' },
     { text: 'Perfil do Usuário', value: 'perfil' },
@@ -140,6 +148,9 @@ export default class App extends Vue {
     { text: '', value: 'opcoes' },
   ];
 
+  // abrirSolicitacao(){
+  //   this.$router.push('/solicitacao')
+  // }
   async carregarTabela(){
     await this.getUsuario();
   }
