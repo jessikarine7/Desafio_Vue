@@ -11,7 +11,7 @@
       <div class="d-flex align-center">
         <h1 
           class="tituloModal mr-4"
-        >Usuário Agrale {{pegarUsuario.id}}</h1>
+        >Usuário {{pegarUsuario.id}}</h1>
 
         <v-btn               
           hide-details

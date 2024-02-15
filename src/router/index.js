@@ -11,7 +11,7 @@
 //     name: "usuarios",
 //     permission: "",
 //     meta: { title: "usuarios" },
-//     component: () => import("@/views/usuarios/usuariosAgrale.vue"),
+//     component: () => import("@/views/usuarios/usuarios.vue"),
 //     children: [
 //       {
 //         path: "/solicitacao",

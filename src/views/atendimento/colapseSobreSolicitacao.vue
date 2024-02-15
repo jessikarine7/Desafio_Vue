@@ -43,11 +43,11 @@
   <div class="borda d-flex justify-space-between px-3 py-2">
     <div class="d-flex align-center">
       <v-btn class="mr-2" icon dark style="background: #971E27" >
-        <v-img 
-          :src="require('@/assets/agrale-logo-branca-small.png')" 
+        <!-- <v-img 
+          :src="require('@/assets/')" 
           max-width="25" 
           max-height="25"
-        ></v-img>
+        ></v-img> -->
       </v-btn>
       <span class="spanNome">Isaque Nilton</span>
     </div>
@@ -96,12 +96,12 @@
 
     <div class="d-flex">
       <div class="d-flex px-3" style="width: 50%">
-        <v-img 
+        <!-- <v-img 
           class="mr-5" 
           :src="require('@/assets/imagens/arquivo1.png')" 
           max-width="100" 
           max-height="100"
-        ></v-img>
+        ></v-img> -->
 
         <div class="d-flex flex-column">
           <span style="font-size: 13px; color: #4D4D4D">Comentário</span>
@@ -110,12 +110,12 @@
       </div>
 
       <div class="d-flex px-3" style="width: 50%">
-        <v-img  
+        <!-- <v-img  
           class="mr-5" 
           :src="require('@/assets/imagens/arquivo2.png')" 
           max-width="100" 
           max-height="100"
-        ></v-img>
+        ></v-img> -->
 
         <div class="d-flex flex-column">
           <span style="font-size: 13px; color: #4D4D4D">Comentário</span>

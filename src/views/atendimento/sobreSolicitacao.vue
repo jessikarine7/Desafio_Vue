@@ -96,15 +96,15 @@
       </div>
 
       <div class="px-4 py-2 d-flex align-center justify-end" style="width: 70%">
-        <v-img 
+        <!-- <v-img 
           :src="require('@/assets/imagens/veiculo.png')" 
           max-width="35" 
           max-height="20"
           class="mr-2"
-        ></v-img>
+        ></v-img> -->
         <span class="mr-1 spanNome">Solicitação</span>
         <span class="mr-4 spanNumero">12345683</span>
-        <v-btn color="#CD202C" dark>Pendente Agrale</v-btn>
+        <v-btn color="#CD202C" dark>Pendente</v-btn>
       </div>
     </div>  
 
@@ -130,7 +130,7 @@
           <v-container class="d-flex flex-column borda">
             <v-container class="d-flex">
               <span class="mr-2 spanProdutos">Produto: </span> 
-              <span class="spanProdutosN">48 - CAMINHÃO AGRALE 13000</span>
+              <span class="spanProdutosN">48 - CAMINHÃO 13000</span>
             </v-container>
 
             <v-container class="d-flex">
@@ -161,11 +161,11 @@
                 style="font-size:12px"
               >Chassi ou nº de produto</span>
               
-              <v-img 
+              <!-- <v-img 
                 :src="require('@/assets/imagens/arquivo3.png')" 
                 max-width="180" 
                 max-height="120"
-              ></v-img>
+              ></v-img> -->
             </v-container>
 
             <v-container>
@@ -174,11 +174,11 @@
                 style="font-size:12px"
               >Hodômetro</span>
 
-              <v-img 
+              <!-- <v-img 
                 :src="require('@/assets/imagens/arquivo4.png')"  
                 max-width="180" 
                 max-height="120"
-              ></v-img>
+              ></v-img> -->
             </v-container>
           </div>
         </v-expansion-panel-content>

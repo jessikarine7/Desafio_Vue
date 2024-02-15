@@ -22,7 +22,7 @@
     <div class="elevation-2 d-flex justify-space-between pa-4" style="background: #F5F5F5">
       <div class="d-flex align-center">
         <h1 class="tituloModal mr-4">
-          {{pegarUsuario.id ? 'Editar Usuário Agrale '+ pegarUsuario.id : 'Criar Usuário Agrale'}}
+          {{pegarUsuario.id ? 'Editar Usuário'+ pegarUsuario.id : 'Criar Usuário'}}
         </h1>
         <v-switch  
           hide-details 

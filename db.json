@@ -26,13 +26,13 @@
       "titulo": "Motor está falhando constantemente",
       "solicitacao": "Lorem ipsum dolor sit amet. Et rerum suscipit aut repellat error hic veritatis fugit non dolorem praesentium et quas recusandae. Est ullam consequatur sed sunt dolore est labore illum ea corporis culpa sit quaerat internos. Ut dignissimos quibusdam est exercitationem modi et impedit dolorem! Et voluptas libero nam dolor error cum nisi minus ea cumque reprehenderit cum maiores nihil ab eligendi aliquid.",
       "tempo": "1:30",
-      "status": "Pendente Agrale",
+      "status": "Pendente",
       "nomeSolicitante": "Jonas Brother",
       "idEmpresa": 2256.1,
       "razaoSocial": "DEUSDETE SOUSA SANTIAGO & CIA LTDA",
       "dataRecebimento": "15/01/2023",
       "horaRecebimento": "18:30",
-      "responsavelAgrale": "Sem Responsável Agrale"
+      "responsavel": "Sem Responsável"
     }
   ]
 }

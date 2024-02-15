@@ -4,7 +4,6 @@
       <menuLateral/>
       <div class="white d-flex flex-grow-1 flex-row flex-wrap">
         <menuSuperior/>
-        <!-- <usuariosAgrale/> -->
         <!-- <solicitacaoAtendimento/> -->
         <sobreSolicitacao/>
       </div>
@@ -14,7 +13,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import usuariosAgrale from './views/usuarios/usuariosAgrale.vue';
+import usuarios from './views/usuarios/usuarios.vue';
 import menuLateral from './components/menuLateral.vue';
 import menuSuperior from './components/menuSuperior.vue';
 // import solicitacaoAtendimento from './views/atendimento/solicitacaoAtendimento.vue'
@@ -22,7 +21,7 @@ import sobreSolicitacao from './views/atendimento/sobreSolicitacao.vue'
 
 @Component({                            
   components: {
-    usuariosAgrale,
+    usuarios,
     menuLateral,
     menuSuperior,
     // solicitacaoAtendimento,

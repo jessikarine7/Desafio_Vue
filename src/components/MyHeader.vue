@@ -53,7 +53,7 @@ import ModalAddEdit from '../views/usuarios/modalAddEdit.vue';
 })
 
 export default class App extends Vue {
-  @Prop({ type: String, default: 'Usuários Agrale' }) titulo: string;
+  @Prop({ type: String, default: 'Usuários' }) titulo: string;
   @Prop({ type: String, default: '#CD202C' }) buttonCollor: string;
   @Prop({ type: String, default: 'Pesquisa' }) labelPesquisa: string;
   @Prop({ type: String, default: 'Pesquisar por Código, Nome completo, E-mail ou Perfil de Usuário' }) placeholderPesquisa: string;

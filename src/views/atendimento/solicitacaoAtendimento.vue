@@ -25,7 +25,7 @@
               chips
               dense
               multiple        
-              label="Responsável Agrale"
+              label="Responsável"
               :items="['Responsável 1', 'Responsável 2']"
               clearable
               class="mb-2"
@@ -93,7 +93,7 @@
     </v-card>
 
     <v-card outlined label class="card card2 px-4 pt-2 mr-4">
-      <span class="spanNome">Pendente Agrale</span>
+      <span class="spanNome">Pendente</span>
       <span class="spanNumero">20</span>  
     </v-card>
 
@@ -159,7 +159,7 @@
             class="btnListagem" 
             style="background:#CD202C;" 
             dark
-          >Pendente Agrale</v-btn>
+          >Pendente</v-btn>
         </div>
       </div>
 
@@ -221,7 +221,7 @@
             <v-btn class="mr-2" icon style="background: #8C8C8C; width: 28px; height: 28px">
               <v-icon color="white" style="font-size: 17px">mdi-account</v-icon>
             </v-btn>
-            <span class="spanNome">Sem Responsável Agrale</span>
+            <span class="spanNome">Sem Responsável</span>
           </div>
         </div>
       </div>
