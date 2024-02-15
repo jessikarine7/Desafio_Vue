@@ -70,6 +70,7 @@
               label="Data Final"
               class="mt-2 mb-2"
             ></v-text-field>
+
           </v-form>
 
           <v-container class="d-flex justify-space-between align-end">
@@ -107,23 +108,34 @@
     </v-card>
   </div>
 
-  <div class="d-flex justify-end mt-2 mb-4" style="width:100%">
-    <div style="width:70%"></div>
+  <div class="d-flex justify-end mt-2 mb-4" style="width: 100%">
+    <div class="vazio" style="width: 120%"></div>
 
-    <div class="d-flex " style="width:22%">
-      <v-text-field 
-        outlined 
-        class="mr-4 rounded-lg"
-        dense
-        label="Pesquisa"
-        prepend-inner-icon="mdi-magnify"
-      ></v-text-field>
+    <v-text-field 
+      name="pesquisa"
+      class="mr-2 pesquisa"
+      @blur="pesquisa = false"
+      @click="pesquisa = true"
+      :style="pesquisa == true ? 'width: 130%' : 'Width:20%'"
+      v-model="search"
+      @input="pesquisaTabela"
+      outlined 
+      clearable
+      color="#CD202C"
+      :label="labelPesquisa"
+      prepend-inner-icon="mdi-magnify"
+      hide-details
+      dense
+      style="border-radius: 8px"
+      single-line
+      :placeholder="placeholderPesquisa"
+    ></v-text-field>
 
-      <v-btn  class="py-5 btn" outlined @click="drawer = !drawer">
-        <v-icon class="mr-1">mdi-filter-variant</v-icon>
-        Filtros
-      </v-btn>
-    </div>
+    <v-btn  class="py-5 btn" outlined @click="drawer = !drawer">
+      <v-icon class="mr-1">mdi-filter-variant</v-icon>
+      Filtros
+    </v-btn>
+
   </div>
 
   <div style="width: 100%">
@@ -215,11 +227,28 @@
       </div>
     </v-card>
   </div>
+
+  <div class="text-center">
+    <v-container >
+      <v-row justify="center">
+        <v-col cols="8">
+          <v-container class="max-width">
+            <v-pagination
+              color="#971E27"
+              v-model="page"
+              class="my-4"
+              :length="10"
+            ></v-pagination>
+          </v-container>
+        </v-col>
+      </v-row>
+    </v-container>
+  </div>
 </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'; 
+import { Component, Vue, Prop } from 'vue-property-decorator'; 
 import { mapGetters, mapActions } from "vuex";
 // import ModalFiltro from './modalFiltro.vue';
 
@@ -240,11 +269,21 @@ export default class App extends Vue {
   getSolicitacaoId!:() => Promise<[]>
   pegarSolicitacao!:() => (object)
   // getSolicitacao!:() => Promise<[]>
+  @Prop({ type: String, default: 'Pesquisa' }) labelPesquisa: string;
+  @Prop({ type: String, default: 'Pesquisar por Solicitação, Título, Descrição, Solicitante ou Distribuidor' }) placeholderPesquisa: string;
 
   itemsSolicitacao = [];
   status = true;
   displayModalFiltro = false;
   drawer= null;
+  pesquisa = true;
+  search = '';
+  emits = ['pesquisar'];
+  page= 1
+
+  pesquisaTabela(value){
+    this.$emit('pesquisar', value);
+  }
 
   // @Watch('$store.state.visualizarSolicitacao')
   // async carregar(id:number){
@@ -257,12 +296,28 @@ export default class App extends Vue {
 </script>
 
 <style scoped>
-/* .v-btn {
-  align-items: flex-start !important; 
-} */
-/* ::v-deep .filtro{
-  align-items: flex-end !important; 
-} */
+@import "@/assets/scss/_base.scss";
+
+.v-btn:not(.v-btn--round).v-size--default{
+  height: 40PX !important;
+}
+.v-btn:not(.v-btn--round).v-size--default {
+  padding: 0 10px !important;
+}
+.v-list-item:hover{
+  background-color:  #5350501c !important;
+}
+.v-list{
+  padding: 0px 0 !important; 
+}
+.v-input--selection-controls {
+  margin-top: 0px !important; 
+  padding-top: 0px !important;
+}
+::v-deep .v-text-field--outlined.v-input--is-focused fieldset, .v-text-field--outlined.v-input--has-state fieldset {
+  border: solid 1.5px #971E27 !important;
+  color:#971E27 !important;
+}
 .v-list-item {
   min-height: 0px !important; 
 }
